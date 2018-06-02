@@ -160,18 +160,26 @@ router.post('/:userId/subscriptions/:categoryId', Auth.authSameUser, function(re
 
 router.post('/:userId', Auth.authSameUser, function(req, res, next){
     const {about} = req.body;
-    bookshelf.transaction(function(t){
-        var options = {transacting: t};
-        var options2 = options;
-        options2.patch = true;
-        User.where({id: req.params.userId}).fetch().then(function(user){
-            return user.save({about: about}, options2);
-        }).then(t.commit).catch(t.rollback);
-    }).then(function(user){
-        res.status(200).json({error: false, data: {about: user.get("about")}});
-    }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
-    });
+    if(about){
+        if(about.length > 0 && about.constructor !== Array){
+            bookshelf.transaction(function(t){
+                var options = {transacting: t};
+                var options2 = options;
+                options2.patch = true;
+                User.where({id: req.params.userId}).fetch().then(function(user){
+                    return user.save({about: about}, options2);
+                }).then(t.commit).catch(t.rollback);
+            }).then(function(user){
+                res.status(200).json({error: false, data: {about: user.get("about")}});
+            }).catch(function(err){
+                res.status(500).json({error: true, data: {message: err.message}});
+            });
+        } else {
+            res.status(400).json({error: true, data: {message: "About should be a string of length greater than 0"}});
+        }
+    } else {
+        res.status(400).json({error: true, data: {message: "Specify an about field"}});
+    }
 });
 
 router.get('/:userId/recipes', Auth.authSameUser, function(req, res, next){
@@ -222,72 +230,76 @@ router.get('/:userId/recipes', Auth.authSameUser, function(req, res, next){
 router.post('/:userId/recipes/:recipeId', Auth.authSameUser, function(req, res, next){
     const {action} = req.query;
     const {recipeId, userId} = req.params;
-    if(!recipeId){
-        res.status(500).json({error: true, data: {message: "Specify the action. Specify the recipe id."}});
-    } else if (!action){
-        res.status(500).json({error: true, data: {message: "Specify the action. Valid values are 'like', 'dislike', 'neutralize', 'save', and 'unsave'."}});
+    if (!action){
+        res.status(400).json({error: true, data: {message: "Specify the action. Valid values are 'like', 'dislike', 'neutralize', 'save', and 'unsave'."}});
     } else {
         if(recipeId.constructor === Array || action.constructor === Array){
-            res.status(500).json({error: true, data: {message: "Enter only one action and one recipe id"}});
+            res.status(400).json({error: true, data: {message: "Enter only one action"}});
         } else {
-            if(action === 'neutralize' || action === 'unsave'){
-                var model;
-                if(action === 'neutralize'){
-                    model = Vote;
-                } else {
-                    model = RecipeUserSaved;
-                }
-                bookshelf.transaction(function(t){
-                    var options = {transacting: t};
-                    return model.where({user_id: userId, recipe_id: recipeId}).fetch().then(function(m){
-                        if(m){
-                            return m.destroy(options);
-                        }
-                    }).then(t.commit).catch(t.rollback);
-                }).then(function(obj){
-                    res.status(200).json({error: false, data: {recipe_id: recipeId}});
-                }).catch(function(err){
-                    res.status(500).json({error: true, data: {message: err.message}});
-                });
-            } else if(action === 'like' || action === 'dislike'){
-                var choice;
-                if(action === 'like'){
-                    choice = 'l';
-                } else {
-                    choice = 'd';
-                }
-                bookshelf.transaction(function(t){
-                    var options = {transacting: t};
-                    return Vote.where({user_id: userId, recipe_id: recipeId}).fetch().then(function(vote){
-                        if(!vote){
-                            return Vote.forge({user_id: userId, recipe_id: recipeId, type: choice}).save(null, options);
+            Recipe.where({id: recipeId}).fetch().then(function(r){
+                if(r){
+                    if(action === 'neutralize' || action === 'unsave'){
+                        var model;
+                        if(action === 'neutralize'){
+                            model = Vote;
                         } else {
-                            var options2 = options;
-                            options2.patch = true;
-                            return vote.save({type: choice}, options2);
+                            model = RecipeUserSaved;
                         }
-                    }).then(t.commit).catch(t.rollback);
-                }).then(function(recipe){
-                    res.status(200).json({error: false, data: {recipe: recipeId}});
-                }).catch(function(err){
-                    res.status(500).json({error: true, data: {message: err.message}});
-                });
-            } else if(action === 'save') {
-                bookshelf.transaction(function(t){
-                    var options = {transacting: t};
-                    return RecipeUserSaved.where({user_id: userId, recipe_id: recipeId}).fetch().then(function(saved){
-                        if(!saved){
-                            return RecipeUserSaved.forge({user_id: userId, recipe_id: recipeId}).save(null, options);
+                        bookshelf.transaction(function(t){
+                            var options = {transacting: t};
+                            return model.where({user_id: userId, recipe_id: recipeId}).fetch().then(function(m){
+                                if(m){
+                                    return m.destroy(options);
+                                }
+                            }).then(t.commit).catch(t.rollback);
+                        }).then(function(obj){
+                            res.status(200).json({error: false, data: {recipe_id: recipeId}});
+                        }).catch(function(err){
+                            res.status(500).json({error: true, data: {message: err.message}});
+                        });
+                    } else if(action === 'like' || action === 'dislike'){
+                        var choice;
+                        if(action === 'like'){
+                            choice = 'l';
+                        } else {
+                            choice = 'd';
                         }
-                    }).then(t.commit).catch(t.rollback);
-                }).then(function(recipe){
-                    res.status(200).json({error: false, data: {recipe: recipeId}});
-                }).catch(function(err){
-                    res.status(500).json({error: true, data: {message: err.message}});
-                });
-            } else {
-                res.status(500).json({error: true, data: {message: "Invalid action. Valid values are Valid values are 'like', 'dislike', 'neutralize', 'save', and 'unsave'."}});
-            }
+                        bookshelf.transaction(function(t){
+                            var options = {transacting: t};
+                            return Vote.where({user_id: userId, recipe_id: recipeId}).fetch().then(function(vote){
+                                if(!vote){
+                                    return Vote.forge({user_id: userId, recipe_id: recipeId, type: choice}).save(null, options);
+                                } else {
+                                    var options2 = options;
+                                    options2.patch = true;
+                                    return vote.save({type: choice}, options2);
+                                }
+                            }).then(t.commit).catch(t.rollback);
+                        }).then(function(recipe){
+                            res.status(200).json({error: false, data: {recipe: recipeId}});
+                        }).catch(function(err){
+                            res.status(500).json({error: true, data: {message: err.message}});
+                        });
+                    } else if(action === 'save') {
+                        bookshelf.transaction(function(t){
+                            var options = {transacting: t};
+                            return RecipeUserSaved.where({user_id: userId, recipe_id: recipeId}).fetch().then(function(saved){
+                                if(!saved){
+                                    return RecipeUserSaved.forge({user_id: userId, recipe_id: recipeId}).save(null, options);
+                                }
+                            }).then(t.commit).catch(t.rollback);
+                        }).then(function(recipe){
+                            res.status(200).json({error: false, data: {recipe: recipeId}});
+                        }).catch(function(err){
+                            res.status(500).json({error: true, data: {message: err.message}});
+                        });
+                    } else {
+                        res.status(400).json({error: true, data: {message: "Invalid action. Valid values are Valid values are 'like', 'dislike', 'neutralize', 'save', and 'unsave'."}});
+                    }
+                } else {
+                    res.status(404).json({error: true, data: {message: "Recipe does not exist"}});
+                }
+            });
         }
     }
 });
