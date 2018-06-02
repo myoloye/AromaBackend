@@ -11,7 +11,7 @@ var Auth = require('../lib/auth');
 var uuidv4 = require('uuid/v4');
 var jwt = require('jsonwebtoken');
 
-
+//add functionality to check that the username, email, and password aren't empty/null
 router.post('/', function(req, res, next){
     const {user} = req.body;
     bookshelf.transaction(function(t){
@@ -49,7 +49,7 @@ router.post('/token', function(req, res, next){
         });
     }).catch(function(err){
         if(err.name = 'PasswordMismatchError'){
-            res.status(400).json({error: true, data: {message: err.message}});
+            res.status(400).json({error: true, data: {message: "Invalid Credentials"}});
         } else {
             res.status(500).json({error: true, data: {message: err.message}});
         }
@@ -58,7 +58,7 @@ router.post('/token', function(req, res, next){
 
 router.post('/logout', function(req, res, next){
     if(!req.headers.authorization){
-        res.status(500).json({error: true, data: {token: "No authorization header given"}});
+        res.status(401).json({error: true, data: {message: "Missing Authorization Header"}});
     } else {
         var token = req.headers.authorization.split(/\s+/)[1];
         var tokenId = Auth.verifyToken(token);

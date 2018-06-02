@@ -1,6 +1,43 @@
+## Register
+
+**Description**: Registers a new user
+
+Title | Register
+:---------- | :--------------------
+**URL** | ```/users```
+**Method** | ```POST```
+**URL Parameters** | none
+**Success Response** | 200 OK
+**Error Response** | 400 BAD REQUEST
+**Notes** |
+
+### Sample Request JSON
+```json
+{
+  "user": {
+    "username": "myoloye",
+    "email": "myoloye@scu.edu",
+    "password": "password"
+  }
+}
+```
+
+### Success Request JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "id": 3
+  }
+}
+```
+
+### Error Response JSON 400 BAD REQUEST
+coming soon
+
 ## Login
 
-**Description**: Gives the user a token to send with future requests that require authorization 
+**Description**: Gives the user a token to send with future requests that require authorization
 
 Title | Login
 :---------- | :--------------------
@@ -9,10 +46,9 @@ Title | Login
 **URL Parameters** | none
 **Success Response** | **Code**: 200 OK
 **Error Response** | **Code**: 400 BAD REQUEST
-**Sample Request** | ```/users/token```
 **Notes** | Email can be either the email or username for the account
 
-### Sample Request
+### Sample Request JSON
 ```json
 {
   "user": {
@@ -30,7 +66,8 @@ OR
   }
 }
 ```
-### Success Response 200 OK
+
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -39,7 +76,8 @@ OR
   }
 }
 ```
-### Error Response 400 BAD REQUEST
+
+### Error Response JSON 400 BAD REQUEST
 ```json
 {
   "error": true,
@@ -49,13 +87,35 @@ OR
 }
 ```
 
+## Logout
+
+**Description**: Logs out the user by invalidating the token given at login
+
 Title | Logout
 :---------- | :--------------------
-**URL** |
-**Method** |
-**URL Parameters** |
-**Success Response** |
-**Error Response** |
-**Error Response** |
-**Sample Request** |
+**URL** | ```/users/logout```
+**Method** | ```POST```
+**URL Parameters** | none
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 401 UNAUTHORIZED
 **Notes** |
+
+### Sample Request JSON
+none
+
+### Success Request JSON 200 OK
+```json
+{
+  "error": false
+}
+```
+
+### Error Response JSON 401 UNAUTHORIZED
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Missing Authorization Header"
+  }
+}
+```

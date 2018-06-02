@@ -401,6 +401,5 @@ function addRecipe(recipe) {
             return Promise.all(helpers);
         }).then(t.commit).catch(t.rollback);
     });*/
-}
 
 module.exports = router;
