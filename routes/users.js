@@ -6,6 +6,7 @@ var Recipe = require('../models/recipe');
 var Vote = require('../models/vote');
 var CategoryUser = require('../models/category_user');
 var RecipeUserSaved = require('../models/recipe_user_saved');
+var Category = require('../models/category');
 var Token = require('../models/token');
 var Auth = require('../lib/auth');
 var uuidv4 = require('uuid/v4');
@@ -82,18 +83,20 @@ router.post('/logout', function(req, res, next){
     }
 });
 
+//to do: add check to determine if the user is viewing their own profile
 router.get('/:userId', function(req, res, next){
     bookshelf.transaction(function(t){
         var options = {transacting: t};
         User.where({id: req.params.userId}).fetch().then(t.commit).catch(t.rollback);
     }).then(function(user){
-        if(req.headers['authorization'] == user.id) {
-            res.status(200).json({error: false, data: {user: user.mask(user.masks.own)}});
-        } else {
+        if(user){
             res.status(200).json({error: false, data: {user: user.mask(user.masks.visitor)}});
+        } else {
+            res.status(404).json({error: false, data: {message: "User does not exist"}});
         }
     }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
+        console.log(err);
+        res.status(500).json({error: true, data: {message: 'Server error'}});
     });
 });
 
@@ -102,7 +105,11 @@ router.get('/:userId/subscriptions', Auth.authSameUser, function(req, res, next)
         var options = {transacting: t};
         User.where({id: req.params.userId}).fetch({withRelated: ['subscribed_to']}).then(t.commit).catch(t.rollback);
     }).then(function(user){
-        res.status(200).json({error: false, data: {categories: user.related('subscribed_to').mask('id,name')}});
+        if(user){
+            res.status(200).json({error: false, data: {categories: user.related('subscribed_to').mask('id,name')}});
+        } else {
+            res.status(404).json({error: false, data: {message: "User does not exist"}});
+        }
     }).catch(function(err){
         res.status(500).json({error: true, data: {message: err.message}});
     });
@@ -113,37 +120,42 @@ router.post('/:userId/subscriptions/:categoryId', Auth.authSameUser, function(re
     const {userId, categoryId} = req.params;
     if(action){
         if(action.constructor === Array){
-            res.status(500).json({error: true, data: {message: "Enter only one action"}});
+            res.status(400).json({error: true, data: {message: "Enter only one action"}});
         } else {
             if(action === 'subscribe' || action === 'unsubscribe'){
-                bookshelf.transaction(function(t){
-                    var options = {transacting: t};
-                    return CategoryUser.where({user_id: userId, category_id: categoryId}).fetch().then(function(category){
-                        if(category){
-                            if(action === 'unsubscribe'){
-                                return category.destroy(options);
-                            }
-                            return categoryId;
-                        } else {
-                            if(action === 'subscribe'){
-                                return CategoryUser.forge({user_id: userId, category_id: categoryId}).save(null, options);
-                            }
-                            return categoryId;
-                        }
-                    }).then(t.commit).catch(t.rollback);
-                }).then(function(category){
-                    res.status(200).json({error: false, data: {category_id: categoryId}});
-                }).catch(function(err){
-                    res.status(500).json({error: true, data: {message: err.message}});
+                Category.where({id: categoryId}).fetch().then(function(c){
+                    if(c){
+                        bookshelf.transaction(function(t){
+                            var options = {transacting: t};
+                            return CategoryUser.where({user_id: userId, category_id: categoryId}).fetch().then(function(category){
+                                if(category){
+                                    if(action === 'unsubscribe'){
+                                        return category.destroy(options);
+                                    }
+                                    return categoryId;
+                                } else {
+                                    if(action === 'subscribe'){
+                                        return CategoryUser.forge({user_id: userId, category_id: categoryId}).save(null, options);
+                                    }
+                                    return categoryId;
+                                }
+                            }).then(t.commit).catch(t.rollback);
+                        }).then(function(category){
+                            res.status(200).json({error: false, data: {category_id: categoryId}});
+                        }).catch(function(err){
+                            res.status(500).json({error: true, data: {message: err.message}});
+                        });
+                    } else {
+                        res.status(404).json({error: true, data: {message: "Category does not exist"}});
+                    }
                 });
             } else {
-                res.status(500).json({error: true, data: {message: "Invalid type. Valid values are 'subscribe' and 'unsubscribe'."}});
+                res.status(400).json({error: true, data: {message: "Invalid action. Valid values are 'subscribe' and 'unsubscribe'."}});
             }
         }
     } else {
-        res.status(500).json({error: true, data: {message: "Specify the action. Valid values are 'subscribe' and 'unsubscribe'."}});
+        res.status(400).json({error: true, data: {message: "Specify the action. Valid values are 'subscribe' and 'unsubscribe'."}});
     }
-
 });
 
 router.post('/:userId', Auth.authSameUser, function(req, res, next){
@@ -165,7 +177,7 @@ router.post('/:userId', Auth.authSameUser, function(req, res, next){
 router.get('/:userId/recipes', Auth.authSameUser, function(req, res, next){
     const {type} = req.query;
     if(!type){
-        res.status(500).json({error: true, data: {message: "Specify the type of recipes. Valid values are 'saved', 'liked', 'disliked', and 'uploaded'."}});
+        res.status(400).json({error: true, data: {message: "Specify the type of recipes. Valid values are 'saved', 'liked', 'disliked', and 'uploaded'."}});
     } else {
         if(type.constructor !== Array){
             var r;
@@ -178,7 +190,7 @@ router.get('/:userId/recipes', Auth.authSameUser, function(req, res, next){
             } else if (type === 'uploaded'){
                 r = null;
             } else {
-                res.status(500).json({error: true, data: {message: "Invalid type. Valid values are 'saved', 'liked', 'disliked', and 'uploaded'."}});
+                res.status(400).json({error: true, data: {message: "Invalid type. Valid values are 'saved', 'liked', 'disliked', and 'uploaded'."}});
             }
             const related = r;
             console.log(related);
@@ -202,7 +214,7 @@ router.get('/:userId/recipes', Auth.authSameUser, function(req, res, next){
                 });
             }
         } else {
-            res.status(500).json({error: true, data: {message: "Enter only one type"}});
+            res.status(400).json({error: true, data: {message: "Enter only one type"}});
         }
     }
 });

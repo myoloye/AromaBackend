@@ -1,6 +1,6 @@
 ## Register
 
-**Description**: Registers a new user
+**Description**: Registers a new user. Returns the id of the newly created user.
 
 Title | Register
 :---------- | :--------------------
@@ -15,8 +15,8 @@ Title | Register
 ```json
 {
   "user": {
-    "username": "myoloye",
-    "email": "myoloye@scu.edu",
+    "username": "username",
+    "email": "email@example.com",
     "password": "password"
   }
 }
@@ -37,7 +37,7 @@ coming soon
 
 ## Login
 
-**Description**: Gives the user a token to send with future requests that require authorization
+**Description**: Logs in the user. Returns a token to send with future requests to the server.
 
 Title | Login
 :---------- | :--------------------
@@ -116,6 +116,179 @@ none
   "error": true,
   "data": {
     "message": "Missing Authorization Header"
+  }
+}
+```
+
+## Get User Profile
+
+**Description**: Get the profile of a specific user by their user id.
+
+Title | Get User Profile
+:---------- | :--------------------
+**URL** | ```/users/:id```
+**Method** | ```GET```
+**URL Parameters** | **Required**<br>```id=[integer]```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 404 NOT FOUND
+**Sample Request** | ```/users/1```
+**Notes** |
+
+### Sample Request JSON
+none
+
+### Success Request JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "user": {
+      "username": "username",
+      "about": "user about me goes here"
+    }
+  }
+}
+```
+
+### Error Response JSON 404 NOT FOUND
+```json
+{
+  "error": false,
+  "data": {
+    "message": "User does not exist"
+  }
+}
+```
+
+## Get User's Subscriptions
+
+**Description**: Get the list of recipe categories that the given user is subscribed to
+
+Title | Get User's Subscriptions
+:---------- | :--------------------
+**URL** | ```/users/:id/subscriptions```
+**Method** | ```GET```
+**URL Parameters** | **Required**<br>```id=[integer]```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 401 UNAUTHORIZED
+**Error Response** | **Code**: 403 FORBIDDEN
+**Error Response** | **Code**: 404 NOT FOUND
+**Sample Request** | ```/users/1/subscriptions```
+**Notes** |
+
+### Sample Request JSON
+none
+
+### Success Request JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "categories": [{
+      "id": 31,
+      "name": "american"
+    }, {
+      "id": 38,
+      "name": "caribbean"
+    }]
+  }
+}
+```
+
+### Error Response JSON 401 UNAUTHORIZED
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Missing Authorization Header"
+  }
+}
+```
+
+### Error Response JSON 403 FORBIDDEN
+```json
+{
+  "error": true,
+  "data": {
+    "message": "You are unauthorized"
+  }
+}
+```
+
+### Error Response JSON 404 NOT FOUND
+```json
+{
+  "error": false,
+  "data": {
+    "message": "User does not exist"
+  }
+}
+```
+
+## Subscribe or Unsubscribe to a Category
+
+**Description**: Subscribes or unsubscribes the given user to the given category
+
+Title | Subscribe or Unsubscribe
+:---------- | :--------------------
+**URL** | ```/users/:userId/subscriptions/:categoryId```
+**Method** | ```POST```
+**URL Parameters** | **Required**<br>```userId=[integer]```<br>```categoryId=[integer]```<br>```action=['subscribe' or 'unsubscribe']```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 401 UNAUTHORIZED
+**Error Response** | **Code**: 403 FORBIDDEN
+**Error Response** | **Code**: 404 NOT FOUND
+**Sample Request** | ```/users/1/subscriptions/1?action=subscribe```
+**Notes** |
+
+### Sample Request JSON
+none
+
+### Success Request JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "category_id": "1"
+  }
+}
+```
+
+### Error Response JSON 401 UNAUTHORIZED
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Missing Authorization Header"
+  }
+}
+```
+
+### Error Response JSON 403 FORBIDDEN
+```json
+{
+  "error": true,
+  "data": {
+    "message": "You are unauthorized"
+  }
+}
+```
+
+### Error Response JSON 404 NOT FOUND
+```json
+{
+  "error": false,
+  "data": {
+    "message": "User does not exist"
+  }
+}
+```
+OR
+```json
+{
+  "error": false,
+  "data": {
+    "message": "Category does not exist"
   }
 }
 ```
