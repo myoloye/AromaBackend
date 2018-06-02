@@ -1,0 +1,48 @@
+{
+    "recipe":{
+        "vegetarian":
+        "vegan":
+        "glutenFree":
+        "dairyFree":
+        "sourceUrl":
+        "sourceName":
+        "ingredients":[
+            {
+                id:
+                original:
+                amount:
+                unit:
+                meta: []
+                measures:{
+                    us:{
+                        amount:
+                        unitShort:
+                        unitLong:
+
+                    },
+                    metric:{
+                        amount:
+                        unitShort:
+                        unitLong:
+                    }
+                }
+            }
+        ],
+        title:
+        readyInMinutes:
+        servings:
+        image:
+        cuisines:[]
+        dishTypes:[]
+        instructions:[
+            {
+                steps:[
+                    {
+                        number:
+                        step:
+                    }
+                ]
+            }
+        ]
+    }
+}

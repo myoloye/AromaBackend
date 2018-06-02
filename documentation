@@ -1,0 +1,28 @@
+POST /users
+Description: adds a new user. Takes username, email, and password
+
+Request format:
+
+{
+    "user": {
+        "username": "myoloye",
+        "email": "myoloye@scu.edu",
+        "password": "password"
+    }
+}
+
+PUT /users/:id
+Description: updates a user's about me
+
+Request format:
+
+{
+    "about": "about me goes here"
+}
+
+GET /users/:id
+
+Description: view a user profile
+
+POST /recipe
+Description: adds a new Recipe

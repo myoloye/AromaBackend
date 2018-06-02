@@ -1,0 +1,54 @@
+{
+    body: {
+        recipes: [
+            {
+                vegetarian:
+                vegan:
+                glutenFree:
+                dairyFree:
+                sourceUrl:
+                sourceName:
+                extendedIngredients:[
+                    {
+                        id:
+                        original:
+                        amount:
+                        unit:
+                        meta: []
+                        measures:{
+                            us:{
+                                amount:
+                                unitShort:
+                                unitLong:
+
+                            },
+                            metric:{
+                                amount:
+                                unitShort:
+                                unitLong:
+                            }
+                        }
+                    }
+                ],
+                id:
+                title:
+                readyInMinutes:
+                servings:
+                image:
+                imageType:
+                cuisines:[]
+                dishTypes:[]
+                analyzedInstructions:[
+                    {
+                        steps:[
+                            {
+                                number:
+                                step:
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
