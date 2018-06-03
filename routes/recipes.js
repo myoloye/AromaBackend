@@ -9,6 +9,7 @@ var Category_Recipe = require('../models/category_recipe');
 var Ingredient_Recipe = require('../models/ingredient_recipe');
 var SimilarIngredient = require('../models/similaringredient');
 var Comment = require('../models/comment');
+var Auth = require('../lib/auth');
 var convert = require('convert-units');
 var pluralize = require('pluralize');
 var Ing = require('../similaringredients');
@@ -16,36 +17,74 @@ var Ing = require('../similaringredients');
 var Fuse = require('fuse.js');
 
 router.get('/:recipeId', function(req, res, next){
-    bookshelf.transaction(function(t){
-        var options = {transacting: t};
-        return Recipe.where({id: req.params.recipeId}).fetch({withRelated: ['ingredients', 'instructions', 'categories', 'comments', 'comments.user']}).then(t.commit).catch(t.rollback);
-    }).then(function(recipe){
-        res.status(200).json({error: false, data: {recipe: recipe}});
-    }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
+    const {recipeId} = req.params;
+    Recipe.where({id: req.params.recipeId}).fetch().then(function(r){
+        if(r){
+            var getId = Auth.getUserId(req.headers.authorization);
+            getId.then(function(uid){
+                const voteandsave = bookshelf.knex.raw('hasSaved(?, id) as saved, getVote(?, id) as vote', [uid, uid]);
+                bookshelf.transaction(function(t){
+                    var options = {transacting: t};
+                    return Recipe.query(function(qb){
+                        if(uid){
+                            return qb.select('*', voteandsave)
+                                     .where('id', '=', recipeId);
+                        } else {
+                            return qb.select('*')
+                                     .where('id', '=', recipeId);
+                        }
+                    }).fetch({withRelated: ['ingredients', 'instructions', 'categories', 'comments', 'comments.user']}).then(t.commit).catch(t.rollback);
+                }).then(function(recipe){
+                    res.status(200).json({error: false, data: {recipe: recipe}});
+                }).catch(function(err){
+                    res.status(500).json({error: true, data: {message: err.message}});
+                });
+            });
+        } else {
+            res.status(404).json({error: true, data: {message: "Recipe does not exist"}});
+        }
     });
 });
 
 router.post('/:recipeId/comments', function(req, res, next){
     const {comment} = req.body;
-    bookshelf.transaction(function(t){
-        var options = {transacting: t};
-        Comment.forge(comment).save({user_id: req.headers.authorization, recipe_id: req.params.recipeId}).then(function(comment){
-            res.status(200).json({error: false, data: {comment: comment}});
-        }).then(t.commit).catch(t.rollback);
-    }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
+    Recipe.where({id: req.params.recipeId}).fetch().then(function(r){
+        if(r){
+            var getId = Auth.getUserId(req.headers.authorization);
+            getId.then(function(uid){
+                if(uid){
+                    bookshelf.transaction(function(t){
+                        var options = {transacting: t};
+                        Comment.forge(comment).save({user_id: uid, recipe_id: req.params.recipeId}).then(function(comment){
+                            res.status(200).json({error: false, data: {comment: comment}});
+                        }).then(t.commit).catch(t.rollback);
+                    }).catch(function(err){
+                        res.status(500).json({error: true, data: {message: err.message}});
+                    });
+                } else {
+                    res.status(401).json({error: true, data: {message: 'Invalid authorization'}});
+                }
+            });
+        } else {
+            res.status(404).json({error: true, data: {message: "Recipe does not exist"}});
+        }
     });
 });
 
 router.get('/:recipeId/comments', function(req, res, next){
-    bookshelf.transaction(function(t){
-        var options = {transacting: t};
-        Comment.where({recipe_id: req.params.recipeId}).orderBy('time_added', 'ASC').fetchAll({withRelated: ['user']}).then(function(comments){
-            res.status(200).json({error: false, data: {comments: comments.mask(Comment.forge().masks.toRecipeWithUser)}});
-        }).then(t.commit).catch(t.rollback);
-    }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
+    Recipe.where({id: req.params.recipeId}).fetch().then(function(r){
+        if(r){
+            bookshelf.transaction(function(t){
+                var options = {transacting: t};
+                Comment.where({recipe_id: req.params.recipeId}).orderBy('time_added', 'ASC').fetchAll({withRelated: ['user']}).then(function(comments){
+                    res.status(200).json({error: false, data: {comments: comments.mask(Comment.forge().masks.toRecipeWithUser)}});
+                }).then(t.commit).catch(t.rollback);
+            }).catch(function(err){
+                res.status(500).json({error: true, data: {message: err.message}});
+            });
+        } else {
+            res.status(404).json({error: true, data: {message: "Recipe does not exist"}});
+        }
     });
 });
 
@@ -76,175 +115,223 @@ router.get('/', function(req, res, next){
         var d = excludes;
     }
     const exclude = d;
-    if(search === 'category'){
-        const hasCategories = {};
-        var promises = [];
-        if(categories){
-            for(var i = 0; i < categories.length; i++){
-                promises.push(Category_Recipe.query({where: {category_id: categories[i]}}).fetchAll({columns: ['recipe_id']}).then(function(recipes){
-                    r = recipes.toJSON();
-                    console.log(r);
-                    for(var i = 0; i < r.length; i++){
-                        var id = r[i].recipe_id;
-                        if(hasCategories[id]){
-                            hasCategories[id] = hasCategories[id] + 1;
-                        } else {
-                            hasCategories[id] = 1;
-                        }
-                    }
-                }));
-            }
-        }
-        if(promises.length > 0){
-            Promise.all(promises).then(function(){
-                var ids = [];
-                var ranges = [];
-                const finalRecipes = [];
-                var promises = [];
-                var keys = Object.keys(hasCategories);
-                for(var i = 1; i <= categories.length; i++){
-                    ranges[i] = [];
-                }
-                for(var i = 0; i < keys.length; i++){
-                    var index = hasCategories[keys[i]];
-                    ranges[index].push(keys[i]);
-                }
-
-                for(var i = categories.length; i > 0; i--){
-                    promises.push(Recipe.where('id', 'IN', ranges[i]).orderBy('score', 'DESC').fetchAll({columns: ['id', 'title', 'image_url', 'likes', 'dislikes', 'score']}).then(function(recipes){
-                        var results = recipes.toJSON();
-                        console.log(results);
-                        if(keyword){
-                            if(keyword.trim().length > 0){
-                                var options = {
-                                    shouldSort: true,
-                                    threshold: 0.2,
-                                    location: 0,
-                                    distance: 1000,
-                                    maxPatternLength: 32,
-                                    minMatchCharLength: 3,
-                                    keys: [
-                                        "title"
-                                    ]
-                                };
-                                var fuse = new Fuse(results, options);
-                                var results = fuse.search(keyword);
+    console.log(req.headers.authorization);
+    var getId = Auth.getUserId(req.headers.authorization);
+    getId.then(function(uid){
+        console.log(uid);
+        if(search === 'category'){
+            const voteandsave = bookshelf.knex.raw('hasSaved(?, id) as saved, getVote(?, id) as vote', [uid, uid]);
+            const hasCategories = {};
+            var promises = [];
+            if(categories){
+                for(var i = 0; i < categories.length; i++){
+                    promises.push(Category_Recipe.query({where: {category_id: categories[i]}}).fetchAll({columns: ['recipe_id']}).then(function(recipes){
+                        r = recipes.toJSON();
+                        for(var i = 0; i < r.length; i++){
+                            var id = r[i].recipe_id;
+                            if(hasCategories[id]){
+                                hasCategories[id] = hasCategories[id] + 1;
+                            } else {
+                                hasCategories[id] = 1;
                             }
-                        }
-                        for(var i = 0; i < results.length; i++){
-                            finalRecipes.push(results[i])
                         }
                     }));
                 }
-                Promise.all(promises).then(function(){
-                    res.status(200).json({error: false, data: {recipes: finalRecipes}});
-                });
-
-            });
-        } else {
-            if(keyword){
-                if(keyword.trim().length > 0){
-                    Recipe.fetchAll({columns: ['id', 'title']}).then(function(recipes){
-                        var options = {
-                            id: "id",
-                            shouldSort: true,
-                            threshold: 0.2,
-                            location: 0,
-                            distance: 1000,
-                            maxPatternLength: 32,
-                            minMatchCharLength: 3,
-                            keys: [
-                                "title"
-                            ]
-                        };
-                        var fuse = new Fuse(recipes.toJSON(), options);
-                        var result = fuse.search(keyword);
-                        const coll = Recipe.collection();
-                        var modelList = [];
-                        for(var i = 0; i < result.length; i++){
-                            modelList.push(new Recipe({id: result[i]}));
-                        }
-                        coll.reset(modelList);
-                        const modelList2 = [];
-                        var proms = [];
-                        for(var i = 0; i < result.length; i++){
-                            proms.push(coll.at(i).fetch().then(function(recipe){
-                                modelList2.push(recipe);
-                            }));
-                        }
-                        Promise.all(proms).then(function(){
-                            coll.reset(modelList2);
-                            res.status(200).json({error: false, data: {recipes: coll.mask('id,title,image_url,likes,dislikes,scores')}});
-                        });
-                    });
-                }
-            } else {
-                res.status(500).json({error: true, data: {message: 'Need to specify a keyword parameter'}});
             }
-        }
-    } else if(search === 'ingredient'){
-        if(include || exclude){
-            Recipe.query(function(qb){
-                if(include && exclude){
-                    console.log('has both');
-                    var query = '(';
-                    for(var i = 0; i < include.length; i++){
-                        if(i == 0){
-                            query += 'hasFood(id, \'' + include[i] + '\')';
-                        } else {
-                            query += ' + hasFood(id, \'' + include[i] + '\')';
-                        }
+            if(promises.length > 0){
+                Promise.all(promises).then(function(){
+                    var ids = [];
+                    const ranges = [];
+                    const finalRecipes = [];
+                    var promises = [];
+                    var keys = Object.keys(hasCategories);
+                    for(var i = 1; i <= categories.length; i++){
+                        ranges[i] = [];
                     }
-                    query += ') as include_count';
-                    var incl = bookshelf.knex.raw(query);
-                    var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
-                        this.select('ingredient_id').from('similaringredient').whereIn('ingredient_name', exclude);
-                    }).andWhere(function(){
-                        this.whereRaw('recipe_id = recipe.id');
-                    }).as('exclude_count');
-                    return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl, excl)
-                             .having('exclude_count', '=', 0)
-                             .andHaving('include_count', '=', include.length)
-                             .orderBy('include_count', 'DESC')
-                             .orderBy('score', 'DESC');
-                } else if(include){
-                    console.log('has include');
-                    var query = '(';
-                    for(var i = 0; i < include.length; i++){
-                        if(i == 0){
-                            query += 'hasFood(id, \'' + include[i] + '\')';
-                        } else {
-                            query += ' + hasFood(id, \'' + include[i] + '\')';
-                        }
+                    for(var i = 0; i < keys.length; i++){
+                        var index = hasCategories[keys[i]];
+                        ranges[index].push(keys[i]);
                     }
-                    query += ') as include_count';
-                    var incl = bookshelf.knex.raw(query);
-                    return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl)
-                             .having('include_count', '=', include.length)
-                             .orderBy('include_count', 'DESC')
-                             .orderBy('score', 'DESC');
+
+                    for(var i = categories.length; i > 0; i--){
+                        promises.push(Recipe.query(function(qb){
+                            if(uid){
+                                return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', voteandsave)
+                                         .whereIn('id', ranges[i])
+                                         .orderBy('score', 'DESC');
+                            } else {
+                                return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score')
+                                         .whereIn('id', ranges[i])
+                                         .orderBy('score', 'DESC');
+                            }
+                        }).fetchAll().then(function(recipes){
+                            var results = recipes.toJSON();
+                            if(keyword){
+                                if(keyword.trim().length > 0){
+                                    var options = {
+                                        shouldSort: true,
+                                        threshold: 0.2,
+                                        location: 0,
+                                        distance: 1000,
+                                        maxPatternLength: 32,
+                                        minMatchCharLength: 3,
+                                        keys: [
+                                            "title"
+                                        ]
+                                    };
+                                    var fuse = new Fuse(results, options);
+                                    var results = fuse.search(keyword);
+                                }
+                            }
+                            for(var i = 0; i < results.length; i++){
+                                finalRecipes.push(results[i])
+                            }
+                        }));
+                    }
+                    Promise.all(promises).then(function(){
+                        res.status(200).json({error: false, data: {recipes: finalRecipes}});
+                    });
+
+                });
+            } else {
+                if(keyword){
+                    if(keyword.trim().length > 0){
+                        Recipe.fetchAll({columns: ['id', 'title']}).then(function(recipes){
+                            var options = {
+                                id: "id",
+                                shouldSort: true,
+                                threshold: 0.2,
+                                location: 0,
+                                distance: 1000,
+                                maxPatternLength: 32,
+                                minMatchCharLength: 3,
+                                keys: [
+                                    "title"
+                                ]
+                            };
+                            var fuse = new Fuse(recipes.toJSON(), options);
+                            var result = fuse.search(keyword);
+                            const coll = Recipe.collection();
+                            var modelList = [];
+                            for(var i = 0; i < result.length; i++){
+                                modelList.push(new Recipe({id: result[i]}));
+                            }
+                            coll.reset(modelList);
+                            const modelList2 = [];
+                            var proms = [];
+                            for(var i = 0; i < result.length; i++){
+                                proms.push(coll.at(i).query(function(qb){
+                                    if(uid){
+                                        return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', voteandsave)
+                                                 .orderBy('score', 'DESC');
+                                    } else {
+                                        return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score')
+                                                 .orderBy('score', 'DESC');
+                                    }
+                                }).fetch().then(function(recipe){
+                                    modelList2.push(recipe);
+                                }));
+                            }
+                            Promise.all(proms).then(function(){
+                                coll.reset(modelList2);
+                                res.status(200).json({error: false, data: {recipes: coll}});
+                            });
+                        });
+                    }
                 } else {
-                    console.log('has exclude');
-                    var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
-                        this.select('ingredient_id').from('similaringredient').whereIn('ingredient_name', exclude);
-                    }).andWhere(function(){
-                        this.whereRaw('recipe_id = recipe.id');
-                    }).as('exclude_count');
-                    return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', excl)
-                             .having('exclude_count', '=', 0)
-                             .orderBy('score', 'DESC');
+                    res.status(400).json({error: true, data: {message: 'Need to specify a keyword parameter'}});
                 }
-            }).fetchAll().then(function(recipe){
-                res.status(200).json({error: false, data: {recipes: recipe}});
-            }).catch(function(err){
-                res.status(500).json({error: true, data: {message: err.message}});
-            });
+            }
+        } else if(search === 'ingredient'){
+            if(include || exclude){
+                Recipe.query(function(qb){
+                    var voteandsave = bookshelf.knex.raw('hasSaved(?, id) as saved, getVote(?, id) as vote', [uid, uid]);
+                    if(include && exclude){
+                        console.log('has both');
+                        var query = '(';
+                        for(var i = 0; i < include.length; i++){
+                            if(i == 0){
+                                query += 'hasFood(id, \'' + include[i] + '\')';
+                            } else {
+                                query += ' + hasFood(id, \'' + include[i] + '\')';
+                            }
+                        }
+                        query += ') as include_count';
+                        var incl = bookshelf.knex.raw(query);
+                        var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
+                            this.select('ingredient_id').from('similaringredient').whereIn('ingredient_name', exclude);
+                        }).andWhere(function(){
+                            this.whereRaw('recipe_id = recipe.id');
+                        }).as('exclude_count');
+                        if(uid){
+                            return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl, excl, voteandsave)
+                                     .having('exclude_count', '=', 0)
+                                     .andHaving('include_count', '=', include.length)
+                                     .orderBy('include_count', 'DESC')
+                                     .orderBy('score', 'DESC');
+                        } else {
+                            return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl, excl)
+                                     .having('exclude_count', '=', 0)
+                                     .andHaving('include_count', '=', include.length)
+                                     .orderBy('include_count', 'DESC')
+                                     .orderBy('score', 'DESC');
+                        }
+
+                    } else if(include){
+                        console.log('has include');
+                        var query = '(';
+                        for(var i = 0; i < include.length; i++){
+                            if(i == 0){
+                                query += 'hasFood(id, \'' + include[i] + '\')';
+                            } else {
+                                query += ' + hasFood(id, \'' + include[i] + '\')';
+                            }
+                        }
+                        query += ') as include_count';
+                        var incl = bookshelf.knex.raw(query);
+                        if(uid){
+                            return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl, voteandsave)
+                                     .having('include_count', '=', include.length)
+                                     .orderBy('include_count', 'DESC')
+                                     .orderBy('score', 'DESC');
+                        } else {
+                            return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl)
+                                     .having('include_count', '=', include.length)
+                                     .orderBy('include_count', 'DESC')
+                                     .orderBy('score', 'DESC');
+                        }
+
+                    } else {
+                        console.log('has exclude');
+                        var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
+                            this.select('ingredient_id').from('similaringredient').whereIn('ingredient_name', exclude);
+                        }).andWhere(function(){
+                            this.whereRaw('recipe_id = recipe.id');
+                        }).as('exclude_count');
+                        if(uid){
+                            return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', excl, voteandsave)
+                                     .having('exclude_count', '=', 0)
+                                     .orderBy('score', 'DESC');
+                        } else {
+                            return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', excl)
+                                     .having('exclude_count', '=', 0)
+                                     .orderBy('score', 'DESC');
+                        }
+
+                    }
+                }).fetchAll().then(function(recipe){
+                    res.status(200).json({error: false, data: {recipes: recipe}});
+                }).catch(function(err){
+                    res.status(500).json({error: true, data: {message: err.message}});
+                });
+            } else {
+                res.status(400).json({error: true, data: {message: 'Need to specify at least one ingredient'}});
+            }
         } else {
-            res.status(500).json({error: true, data: {message: 'Need to specify at least one ingredient'}});
+            res.status(400).json({error: true, data: {message: 'Need to choose a type'}});
         }
-    } else {
-        res.status(500).json({error: true, data: {message: 'Need to choose a type'}});
-    }
+    });
+
 });
 
 /* hash for category ids

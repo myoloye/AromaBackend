@@ -167,6 +167,35 @@ END//
 DELIMITER ;
 
 DELIMITER //
+CREATE FUNCTION getVote(uid integer, rid integer) returns char(1)
+BEGIN
+    DECLARE vote char(1);
+    SELECT type into vote from votes where user_id = uid and recipe_id = rid;
+    IF (type IS NULL) THEN
+        SET vote = 'n';
+    END IF;
+
+    RETURN (vote);
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION hasSaved(uid integer, rid integer) returns boolean
+BEGIN
+    DECLARE saved boolean;
+    DECLARE tempid integer;
+    SELECT id into tempid from recipe_user_saved where user_id = uid and recipe_id = rid;
+    IF (tempid IS NULL) THEN
+        SET saved = 0;
+    ELSE
+        SET saved = 1;
+    END IF;
+
+    RETURN (saved);
+END//
+DELIMITER ;
+
+DELIMITER //
 CREATE TRIGGER changeScoresInsert AFTER INSERT ON Votes FOR EACH ROW BEGIN
     DECLARE num_likes INTEGER;
     DECLARE num_dislikes INTEGER;

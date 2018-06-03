@@ -85,18 +85,24 @@ router.post('/logout', function(req, res, next){
 
 //to do: add check to determine if the user is viewing their own profile
 router.get('/:userId', function(req, res, next){
-    bookshelf.transaction(function(t){
-        var options = {transacting: t};
-        User.where({id: req.params.userId}).fetch().then(t.commit).catch(t.rollback);
-    }).then(function(user){
-        if(user){
-            res.status(200).json({error: false, data: {user: user.mask(user.masks.visitor)}});
-        } else {
-            res.status(404).json({error: false, data: {message: "User does not exist"}});
-        }
-    }).catch(function(err){
-        console.log(err);
-        res.status(500).json({error: true, data: {message: 'Server error'}});
+    var getId = Auth.getUserId(req.headers.authorization);
+    getId.then(function(uid){
+        bookshelf.transaction(function(t){
+            var options = {transacting: t};
+            User.where({id: req.params.userId}).fetch({withRelated: ['uploaded_recipes']}).then(t.commit).catch(t.rollback);
+        }).then(function(user){
+            if(user){
+                if(uid === user.id){
+                    res.status(200).json({error: false, data: {user: user.mask('id,username,about,email,uploaded_recipes(id,title,image_url,likes,dislikes,score)')}});
+                } else {
+                    res.status(200).json({error: false, data: {user: user.mask('id,username,about,uploaded_recipes(id,title,image_url,likes,dislikes,score)')}})
+                }
+            } else {
+                res.status(404).json({error: false, data: {message: "User does not exist"}});
+            }
+        }).catch(function(err){
+            res.status(500).json({error: true, data: {message: 'Server error'}});
+        });
     });
 });
 
@@ -201,7 +207,6 @@ router.get('/:userId/recipes', Auth.authSameUser, function(req, res, next){
                 res.status(400).json({error: true, data: {message: "Invalid type. Valid values are 'saved', 'liked', 'disliked', and 'uploaded'."}});
             }
             const related = r;
-            console.log(related);
             if(related){
                 bookshelf.transaction(function(t){
                     var options = {transacting: t};
