@@ -1,15 +1,28 @@
 # Table of Contents
 
-* [Register](#register)
-* [Login](#login)
-* [Logout](#logout)
-* [Edit User About Me](#edit-about)
-* [Get User Profile](#get-user-profile)
-* [Get User's Subscriptions](#get-user-subscriptions)
-* [Subscribe or Unsubscribe](#subscribe-unsubscribe)
-* [Get Recipes Related to User](#get-user-related-recipes)
-* [Save, Unsave, or Vote on a Recipe](#save-unsave-vote)
+* [Downloading & Installing](#download-install)
+* [Setting up the Database](#database)
+* [Authorization & Authentication](#authorization)
+* [User API Calls](#user-api)
+  * [Register](#register)
+  * [Login](#login)
+  * [Logout](#logout)
+  * [Edit User About Me](#edit-about)
+  * [Get User Profile](#get-user-profile)
+  * [Get User's Subscriptions](#get-user-subscriptions)
+  * [Subscribe or Unsubscribe](#subscribe-unsubscribe)
+  * [Get Recipes Related to User](#get-user-related-recipes)
+  * [Save, Unsave, or Vote on a Recipe](#save-unsave-vote)
+* [Recipe API Calls](#recipe-api)
+  * [Search for Recipes](#search-recipe)
+  * [Get Recipe Details](#recipe-details)
+* [Ingredient API Calls](#ingredient-api)
+* [Category API Calls](#category-api)
 
+# <a name="download-install"></a>Downloading & Installing
+# <a name="database"></a>Setting up the database
+# <a name="authorization"></a>Authorization & Authentication
+# <a name="user-api"></a>User API Calls
 ## <a name="register"></a> Register
 
 **Description**: Registers a new user. Returns the id of the newly created user.
@@ -112,9 +125,6 @@ Title | Logout
 **Error Response** | **Code**: 401 UNAUTHORIZED
 **Notes** |
 
-### Sample Request JSON
-none
-
 ### Success Response JSON 200 OK
 ```json
 {
@@ -195,9 +205,6 @@ Title | Get User Profile
 **Sample Request** | ```/users/1```
 **Notes** | If the user is viewing their own profile, the result json will include their email
 
-### Sample Request JSON
-none
-
 ### Success Response JSON 200 OK (Viewing Own Profile)
 ```json
 {
@@ -267,9 +274,6 @@ Title | Get User's Subscriptions
 **Sample Request** | ```/users/1/subscriptions```
 **Notes** |
 
-### Sample Request JSON
-none
-
 ### Success Response JSON 200 OK
 ```json
 {
@@ -311,9 +315,6 @@ Title | Subscribe or Unsubscribe
 **Sample Request** | ```/users/1/subscriptions/1?action=subscribe```
 **Notes** |
 
-### Sample Request JSON
-none
-
 ### Success Response JSON 200 OK
 ```json
 {
@@ -324,7 +325,7 @@ none
 }
 ```
 
-### Error Response JSON 404 NOT FOUND
+### Error Response JSON 400 BAD REQUEST
 ```json
 {
   "error": true,
@@ -385,9 +386,6 @@ Title | Get Recipes Related to User
 **Sample Request** | ```/users/1/recipes```
 **Notes** |
 
-### Sample Request JSON
-none
-
 ### Success Response JSON 200 OK
 ```json
 {
@@ -436,9 +434,6 @@ Title | Save, Unsave, or Vote on a Recipe
 **Error Response** | **Code**: 400 BAD REQUEST
 **Sample Request** | ```/users/1/recipes/1?action=dislike```
 **Notes** |
-
-### Sample Request JSON
-none
 
 ### Success Response JSON 200 OK
 ```json
@@ -496,3 +491,240 @@ OR
   }
 }
 ```
+
+# <a name="recipe-api"></a>Recipe API Calls
+
+## <a name="search-recipe"></a>Search for Recipes
+**Description**: Searches for recipes in three modes: Search by category and keyword, search by ingredients that the recipe includes or excludes, and search by popular recipes. This function will return a maximum of 25 recipes at once, you can get more by specifying the page number
+
+Title | Search for Recipes
+:---------- | :--------------------
+**URL** | ```/recipes```
+**Method** | ```GET```
+**URL Parameters** | **Required**<br>```search=['category', 'ingredient', or 'popular']```<br>**If search=category**<br>At least one of:<br>```category=[integer]``` (see the category api for the list of category ids)<br>```keyword=[string]```<br>**If search=ingredient**<br>At least one of:<br>```includes=[string]```<br>```excludes=[string]```<br>(see the ingredient api for the list of searchable ingredients)<br>**Optional**<br>```page=[integer]```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 400 BAD REQUEST
+**Sample Requests** | Get the first 25 popular recipes<br>```/recipes?search=popular```<br><br>Get the second 25 popular recipes<br>```/recipes?search=popular&page=2```<br><br>Get recipes in the vegetarian category<br>```/recipes?search=category&category=1```<br><br>Get recipes in the vegetarian category that also match the keyword 'cake'<br>```/recipes?search=category&category=1&keyword=cake```<br><br>Get recipes that are in both the vegetarian and side dish categories<br>```/recipes?search=category&category=1&category=6```<br><br>Get recipes that include eggs<br>```/recipes?search=ingredient&includes=egg```<br><br>Get recipes that don't have eggs<br>```/recipes?search=ingredient&excludes=egg```<br><br>Get recipes that have eggs and milk, but don't have butter<br>```/recipes?search=ingredient&includes=egg&includes=milk&excludes=butter```
+**Notes** | The 'vote' and 'saved' parameters are only displayed in the response if the request is sent with authorization. These fields represent the user's vote for that recipe (l = like, d = dislike, n = no vote) and if the user has saved the recipe, respectively.
+
+### Success Response JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "recipes": [{
+      "id": 582,
+      "title": "Cheesecake Tart With Berries",
+      "image_url": "https://spoonacular.com/recipeImages/356471-556x370.jpeg",
+      "likes": 0,
+      "dislikes": 0,
+      "score": 0.6,
+      "saved": 0,
+      "vote": "n"
+    }, {
+      "id": 367,
+      "title": "Cheesecake Walnut Caramel Apple Crisp Bars",
+      "image_url": "https://spoonacular.com/recipeImages/611679-556x370.jpg",
+      "likes": 0,
+      "dislikes": 0,
+      "score": 0.6,
+      "saved": 0,
+      "vote": "n"
+    }...]
+  }
+}
+```
+
+### Error Response JSON 400 BAD REQUEST (Forgetting to include either a keyword or catgory example)
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Need to specify a keyword or category parameter"
+  }
+}
+```
+
+## <a name="recipe-details"></a>Get Recipe Details
+
+**Description**: Get the details of a single recipe, including number of servings, time to cook, ingredients, instructions, and categories
+
+Title | Get Recipe Details
+:---------- | :--------------------
+**URL** | ```/recipes/:id```
+**Method** | ```GET```
+**URL Parameters** | **Required**<br>```id=[integer]```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 404 NOT FOUND
+**Sample Request** | ```/recipes/1```
+**Notes** | The 'vote' and 'saved' parameters are only displayed in the response if the request is sent with authorization. These fields represent the user's vote for that recipe (l = like, d = dislike, n = no vote) and if the user has saved the recipe, respectively.
+
+### Success Response JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "recipe": {
+      "id": 1,
+      "title": "Chicken-Fried Steak & Gravy",
+      "description": null,
+      "duration": "30",
+      "image_url": "https://spoonacular.com/recipeImages/775736-556x370.jpg",
+      "user_id": null,
+      "source_url": "http://www.tasteofhome.com/recipes/chicken-fried-steak---gravy",
+      "source": "Taste of Home",
+      "score": 0.6,
+      "likes": 0,
+      "dislikes": 0,
+      "spoonacular_id": 775736,
+      "saved": 1,
+      "vote": "n",
+      "ingredients": [{
+        "id": 10023583,
+        "name": "beef tenderloin steaks",
+        "_pivot_recipe_id": 1,
+        "_pivot_ingredient_id": 10023583,
+        "_pivot_original_string": "4 beef cubed steaks (6 ounces each)",
+        "_pivot_us_amount": 24,
+        "_pivot_us_unit": "oz",
+        "_pivot_metric_amount": 680.389,
+        "_pivot_metric_unit": "g",
+        "_pivot_extra_info": "cubed"
+      }, {
+        "id": 1123,
+        "name": "egg",
+        "_pivot_recipe_id": 1,
+        "_pivot_ingredient_id": 1123,
+        "_pivot_original_string": "2 large eggs",
+        "_pivot_us_amount": 2,
+        "_pivot_us_unit": "eggs",
+        "_pivot_metric_amount": 2,
+        "_pivot_metric_unit": "eggs",
+        "_pivot_extra_info": "large"
+      },...],
+      "instructions": [{
+        "id": 1,
+        "recipe_id": 1,
+        "step_num": 1,
+        "instruction": "Place 1 cup flour in a shallow bowl. In a separate shallow bowl, whisk eggs and 1/2 cup milk until blended. Sprinkle steaks with 3/4 teaspoon each salt and pepper. Dip in flour to coat both sides; shake off excess. Dip in egg mixture, then again in flour."
+      }, {
+        "id": 4,
+        "recipe_id": 1,
+        "step_num": 2,
+        "instruction": "In a large skillet, heat 1/4 in. of oil over medium heat."
+      },...],
+      "categories": [{
+        "id": 14,
+        "name": "sauce",
+        "_pivot_recipe_id": 1,
+        "_pivot_category_id": 14
+      },...]
+    }
+  }
+}
+```
+
+### Error Response JSON 404 NOT FOUND
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Recipe does not exist"
+  }
+}
+```
+
+## Post a Comment on a Recipe
+
+**Description**: This posts a comment on the given recipe. User must be logged in.
+
+Title | Post a Comment on a Recipe
+:---------- | :--------------------
+**URL** | ```/recipes/:id/comments```
+**Method** | ```POST```
+**URL Parameters** | **Required**<br>```id=[integer]```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 404 NOT FOUND
+**Sample Request** | ```/recipes/1/comments```
+**Notes** |
+
+### Sample Request JSON
+```json
+{
+  "comment": {
+      "comment": "this is a comment"
+  }
+}
+```
+
+### Success Response JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "comment": {
+      "comment": "this is a comment",
+      "user_id": 1,
+      "recipe_id": "1",
+      "id": 8
+    }
+  }
+}
+```
+
+### Error Response JSON 404 NOT FOUND
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Recipe does not exist"
+  }
+}
+```
+
+## Get Recipe Comments
+
+**Description**: Get the comments for the given recipe
+
+Title | Get Recipe Comments
+:---------- | :--------------------
+**URL** | ```/recipes/:id/comments```
+**Method** | ```GET```
+**URL Parameters** | **Required**<br>```id=[integer]```
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 404 NOT FOUND
+**Error Response** |
+**Sample Request** | ```/recipes/1/comments```
+**Notes** |
+
+### Success Response JSON
+```json
+{
+  "error": false,
+  "data": {
+    "comments": [{
+      "id": 1,
+      "comment": "This is a great recipe! Very tasty",
+      "time_added": "2018-05-31T22:03:04.000Z",
+      "user": {
+        "id": 1,
+        "username": "myoloye"
+      }
+    }, {
+      "id": 5,
+      "comment": "This is another comment",
+      "time_added": "2018-06-01T00:30:00.000Z",
+      "user": {
+        "id": 1,
+        "username": "myoloye"
+      }
+    },...],
+  }
+}
+```
+
+### Error Response JSON
+
+# <a name="ingredient-api"></a>Ingredient API Calls
+
+# <a name="category-api"></a>Category API Calls

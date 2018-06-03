@@ -33,7 +33,7 @@ router.get('/:recipeId', function(req, res, next){
                             return qb.select('*')
                                      .where('id', '=', recipeId);
                         }
-                    }).fetch({withRelated: ['ingredients', 'instructions', 'categories', 'comments', 'comments.user']}).then(t.commit).catch(t.rollback);
+                    }).fetch({withRelated: ['ingredients', 'instructions', 'categories']}).then(t.commit).catch(t.rollback);
                 }).then(function(recipe){
                     res.status(200).json({error: false, data: {recipe: recipe}});
                 }).catch(function(err){
@@ -55,8 +55,8 @@ router.post('/:recipeId/comments', function(req, res, next){
                 if(uid){
                     bookshelf.transaction(function(t){
                         var options = {transacting: t};
-                        Comment.forge(comment).save({user_id: uid, recipe_id: req.params.recipeId}).then(function(comment){
-                            res.status(200).json({error: false, data: {comment: comment}});
+                        Comment.forge(comment).save({user_id: uid, recipe_id: req.params.recipeId}).then(function(c){
+                            res.status(200).json({error: false, data: {comment: c}});
                         }).then(t.commit).catch(t.rollback);
                     }).catch(function(err){
                         res.status(500).json({error: true, data: {message: err.message}});
@@ -239,7 +239,7 @@ router.get('/', function(req, res, next){
                         });
                     }
                 } else {
-                    res.status(400).json({error: true, data: {message: 'Need to specify a keyword parameter'}});
+                    res.status(400).json({error: true, data: {message: 'Need to specify a keyword or category parameter'}});
                 }
             }
         } else if(search === 'ingredient'){
