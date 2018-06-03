@@ -3,7 +3,7 @@
 * [Register](#register)
 * [Login](#login)
 * [Logout](#logout)
-* [Edit User About Me](#edit-abou)
+* [Edit User About Me](#edit-about)
 * [Get User Profile](#get-user-profile)
 * [Get User's Subscriptions](#get-user-subscriptions)
 * [Subscribe or Unsubscribe](#subscribe-unsubscribe)
@@ -34,7 +34,7 @@ Title | Register
 }
 ```
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -115,7 +115,7 @@ Title | Logout
 ### Sample Request JSON
 none
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false
@@ -152,7 +152,7 @@ Title | Edit User About Me
 }
 ```
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -183,7 +183,7 @@ OR
 
 ## <a name="get-user-profile"></a>Get User Profile
 
-**Description**: Get the profile of a specific user by their user id.
+**Description**: Get the profile of a specific user by their user id, along with the recipes they have uploaded
 
 Title | Get User Profile
 :---------- | :--------------------
@@ -193,19 +193,51 @@ Title | Get User Profile
 **Success Response** | **Code**: 200 OK
 **Error Response** | **Code**: 404 NOT FOUND
 **Sample Request** | ```/users/1```
-**Notes** |
+**Notes** | If the user is viewing their own profile, the result json will include their email
 
 ### Sample Request JSON
 none
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK (Viewing Own Profile)
 ```json
 {
   "error": false,
   "data": {
     "user": {
+      "id": 1,
       "username": "username",
-      "about": "user about me goes here"
+      "about": "add bio here",
+      "email": "email@example.com",
+      "uploaded_recipes": [{
+        "id": 1,
+        "title": "Chicken-Fried Steak & Gravy",
+        "image_url": "https://spoonacular.com/recipeImages/775736-556x370.jpg",
+        "likes": 0,
+        "dislikes": 0,
+        "score": 0.6
+      }]
+    }
+  }
+}
+```
+
+### Success Response JSON 200 OK (Viewing Someone Else's Profile)
+```json
+{
+  "error": false,
+  "data": {
+    "user": {
+      "id": 1,
+      "username": "username",
+      "about": "add bio here",
+      "uploaded_recipes": [{
+        "id": 1,
+        "title": "Chicken-Fried Steak & Gravy",
+        "image_url": "https://spoonacular.com/recipeImages/775736-556x370.jpg",
+        "likes": 0,
+        "dislikes": 0,
+        "score": 0.6
+      }]
     }
   }
 }
@@ -214,7 +246,7 @@ none
 ### Error Response JSON 404 NOT FOUND
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "User does not exist"
   }
@@ -238,7 +270,7 @@ Title | Get User's Subscriptions
 ### Sample Request JSON
 none
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -257,7 +289,7 @@ none
 ### Error Response JSON 404 NOT FOUND
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "User does not exist"
   }
@@ -282,7 +314,7 @@ Title | Subscribe or Unsubscribe
 ### Sample Request JSON
 none
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -323,7 +355,7 @@ OR
 ### Error Response JSON 404 NOT FOUND
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "User does not exist"
   }
@@ -332,7 +364,7 @@ OR
 OR
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "Category does not exist"
   }
@@ -356,7 +388,7 @@ Title | Get Recipes Related to User
 ### Sample Request JSON
 none
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -383,7 +415,7 @@ none
 ### Error Response JSON 404 NOT FOUND
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "User does not exist"
   }
@@ -408,7 +440,7 @@ Title | Save, Unsave, or Vote on a Recipe
 ### Sample Request JSON
 none
 
-### Success Request JSON 200 OK
+### Success Response JSON 200 OK
 ```json
 {
   "error": false,
@@ -449,7 +481,7 @@ OR
 ### Error Response JSON 404 NOT FOUND
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "User does not exist"
   }
@@ -458,7 +490,7 @@ OR
 OR
 ```json
 {
-  "error": false,
+  "error": true,
   "data": {
     "message": "Recipe does not exist"
   }
