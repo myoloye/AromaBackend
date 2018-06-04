@@ -36,7 +36,7 @@ CREATE TABLE Ingredient(
     primary key(id, name);
 );
 
-CREATE TABLE SimilarIngredient(
+CREATE TABLE Similar_Ingredient(
     ingredient_name varchar(30) not null,
     ingredient_id integer not null,
     foreign key (ingredient_id) references Ingredient(id),

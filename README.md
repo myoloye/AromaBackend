@@ -16,12 +16,67 @@
 * [Recipe API Calls](#recipe-api)
   * [Search for Recipes](#search-recipe)
   * [Get Recipe Details](#recipe-details)
+  * [Post a Comment on a Recipe](#post-comment)
+  * [Get Recipe Comments](#get-comments)
 * [Ingredient API Calls](#ingredient-api)
+  * [Get Ingredients](#get-ingredients)
 * [Category API Calls](#category-api)
+  * [Get Categories](#get-categories)
 
 # <a name="download-install"></a>Downloading & Installing
+
+This is a node.js project. You will need npm to run it. You will also need an apache setup for running a local MySQL database.
+
+Once you have downloaded the project, run ```npm install``` to install related libraries.
+
+To run, type ```npm start```. The app will run on localhost:3000.
+
 # <a name="database"></a>Setting up the database
+To set up the database tables, first, make sure that you create a database called "aroma". run the sql queries in the ```aromadb.sql``` file to create the tables and supporting triggers and functions.
+
+To pre-populate the database with recipes, categories, and ingredients, import the following files in the database, included in the sqlfiles folder IN ORDER:
+* ingredients.sql
+* similaringredients.sql
+* categories.sql
+* recipes.sql
+* category_recipe.sql
+* ingredient_recipe.sql
+* instructions.sql
+
 # <a name="authorization"></a>Authorization & Authentication
+
+Most API calls require a user to be logged in. When making a request to one of these endpoints, make sure you have the Authorization header:
+
+```Authorization: Bearer <token>```
+
+Example: ```Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTI4MDY1OTkzLCJqdGkiOiIwMGVjMjJiNy0wOGNjLTQ2YzctODA3OS0zM2E4YWQ4MjNkMWUifQ.kQRlU9NMmFPgiE2kZr6d9ORG20oua-oH21hLPqcBkDo```
+
+You can get a token by making a call to ```/users/token``` with the user's credentials.
+
+API calls that require credentials will be marked with *
+
+Two responses you might see if there is no authorization header or the token is invalid:
+
+**401 UNAUTHORIZED**
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Missing Authorization Header"
+  }
+}
+```
+
+**403 FORBIDDEN**
+```json
+{
+  "error": true,
+  "data": {
+    "message": "You are unauthorized"
+  }
+}
+```
+
 # <a name="user-api"></a>User API Calls
 ## <a name="register"></a> Register
 
@@ -97,7 +152,8 @@ OR
 {
   "error": false,
   "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTI3OTAwNjU2LCJqdGkiOiJhMzVjNjI5YS1lOGI5LTRhOGMtYjIyOS1lYjNiNDVkOTE2ZTMifQ.eHNi9U4QsgCy63yO39kca3z8Q80bm7vlQ1laL7dEzlc"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTI3OTAwNjU2LCJqdGkiOiJhMzVjNjI5YS1lOGI5LTRhOGMtYjIyOS1lYjNiNDVkOTE2ZTMifQ.eHNi9U4QsgCy63yO39kca3z8Q80bm7vlQ1laL7dEzlc",
+    "user": 1
   }
 }
 ```
@@ -112,7 +168,7 @@ OR
 }
 ```
 
-## <a name="logout"></a>Logout
+## <a name="logout"></a>Logout *
 
 **Description**: Logs out the user by invalidating the token given at login
 
@@ -142,7 +198,7 @@ Title | Logout
 }
 ```
 
-## <a name="edit-about"></a> Edit User About Me
+## <a name="edit-about"></a> Edit User About Me *
 
 **Description**: Lets the user edit the about me for their profile
 
@@ -191,7 +247,7 @@ OR
 }
 ```
 
-## <a name="get-user-profile"></a>Get User Profile
+## <a name="get-user-profile"></a>Get User Profile *
 
 **Description**: Get the profile of a specific user by their user id, along with the recipes they have uploaded
 
@@ -260,7 +316,7 @@ Title | Get User Profile
 }
 ```
 
-## <a name="get-user-subscriptions"></a>Get User's Subscriptions
+## <a name="get-user-subscriptions"></a>Get User's Subscriptions *
 
 **Description**: Get the list of recipe categories that the given user is subscribed to
 
@@ -300,7 +356,7 @@ Title | Get User's Subscriptions
 }
 ```
 
-## <a name="subscribe-unsubscribe"></a>Subscribe or Unsubscribe to a Category
+## <a name="subscribe-unsubscribe"></a>Subscribe or Unsubscribe to a Category *
 
 **Description**: Subscribes or unsubscribes the given user to the given category
 
@@ -372,7 +428,7 @@ OR
 }
 ```
 
-## <a name="get-user-related-recipes"></a>Get Recipes Related to User
+## <a name="get-user-related-recipes"></a>Get Recipes Related to User *
 
 **Description**: Gets the list of recipes that are related to the user. Can either be the saved, liked, disliked, or user-uploaded recipes
 
@@ -420,7 +476,7 @@ Title | Get Recipes Related to User
 }
 ```
 
-## <a name="save-unsave-vote"></a>Save, Unsave, or Vote on a Recipe
+## <a name="save-unsave-vote"></a>Save, Unsave, or Vote on a Recipe *
 
 **Description**: Allows the user to save, unsave, like, dislike, or neutralize their vote on a recipe
 
@@ -530,7 +586,13 @@ Title | Search for Recipes
       "score": 0.6,
       "saved": 0,
       "vote": "n"
-    }...]
+    }...],
+    "pagination": {
+      "rowCount": 100,
+      "pageCount": 4,
+      "page": "1",
+      "pageSize": 25
+    }
   }
 }
 ```
@@ -634,7 +696,7 @@ Title | Get Recipe Details
 }
 ```
 
-## Post a Comment on a Recipe
+## <a name="post-comment"></a>Post a Comment on a Recipe *
 
 **Description**: This posts a comment on the given recipe. User must be logged in.
 
@@ -682,18 +744,17 @@ Title | Post a Comment on a Recipe
 }
 ```
 
-## Get Recipe Comments
+## <a name="get-comments"></a>Get Recipe Comments
 
-**Description**: Get the comments for the given recipe
+**Description**: Get the comments for the given recipe. Returns a page of maximum 100 comments. Specify the page number to get more.
 
 Title | Get Recipe Comments
 :---------- | :--------------------
 **URL** | ```/recipes/:id/comments```
 **Method** | ```GET```
-**URL Parameters** | **Required**<br>```id=[integer]```
+**URL Parameters** | **Required**<br>```id=[integer]```<br>**Optional**<br>```page=[integer]```
 **Success Response** | **Code**: 200 OK
 **Error Response** | **Code**: 404 NOT FOUND
-**Error Response** |
 **Sample Request** | ```/recipes/1/comments```
 **Notes** |
 
@@ -719,12 +780,381 @@ Title | Get Recipe Comments
         "username": "myoloye"
       }
     },...],
+    "pagination": {
+      "rowCount": 5,
+      "pageCount": 1,
+      "page": 1,
+      "pageSize": 100
+    }
   }
 }
 ```
 
-### Error Response JSON
+### Error Response JSON 404 NOT FOUND
+```json
+{
+  "error": true,
+  "data": {
+    "message": "Recipe does not exist"
+  }
+}
+```
 
 # <a name="ingredient-api"></a>Ingredient API Calls
 
+## <a name="get-ingredients"></a>Get Ingredients
+
+**Description**: Gets a list of ingredients. Option to either get the full list or the list of searchable ingredients (to use in the recipe search API call).
+
+Title | Get Ingredients
+:---------- | :--------------------
+**URL** | ```/ingredients```
+**Method** | ```GET```
+**URL Parameters** | **Optional**<br>```type=searchable```
+**Success Response** | **Code**: 200 OK
+**Sample Request** | Get all ingredients<br>```/ingredients```<br><br>Get all searchable ingredients<br>```/ingredients?type=searchable```
+**Notes** | If no type is given, defaults to getting all ingredients.
+
+
+### Success Response JSON 200 OK (Searchable Ingredients)
+```json
+{
+  "error": false,
+  "data": {
+    "ingredients": [{
+      "ingredient_name": "alcohol"
+    }, {
+      "ingredient_name": "almond"
+    }, {
+      "ingredient_name": "anchovy"
+    }, {
+      "ingredient_name": "apple"
+    }, {
+      "ingredient_name": "asparagus"
+    }, {
+      "ingredient_name": "avocado"
+    }, {
+      "ingredient_name": "banana"
+    }, {
+      "ingredient_name": "basil"
+    }, {
+      "ingredient_name": "beans"
+    }, {
+      "ingredient_name": "beef"
+    }, {
+      "ingredient_name": "beets"
+    }, {
+      "ingredient_name": "bell pepper"
+    }, {
+      "ingredient_name": "blackberry"
+    }, {
+      "ingredient_name": "blueberry"
+    }, {
+      "ingredient_name": "broccoli"
+    }, {
+      "ingredient_name": "butter"
+    }, {
+      "ingredient_name": "cabbage"
+    }, {
+      "ingredient_name": "carrots"
+    }, {
+      "ingredient_name": "cashew"
+    }, {
+      "ingredient_name": "cauliflower"
+    }, {
+      "ingredient_name": "celery"
+    }, {
+      "ingredient_name": "cheese"
+    }, {
+      "ingredient_name": "cherry"
+    }, {
+      "ingredient_name": "chicken"
+    }, {
+      "ingredient_name": "chocolate"
+    }, {
+      "ingredient_name": "coconut"
+    }, {
+      "ingredient_name": "coffee"
+    }, {
+      "ingredient_name": "corn"
+    }, {
+      "ingredient_name": "cranberry"
+    }, {
+      "ingredient_name": "cream"
+    }, {
+      "ingredient_name": "cucumber"
+    }, {
+      "ingredient_name": "egg"
+    }, {
+      "ingredient_name": "eggplant"
+    }, {
+      "ingredient_name": "flour"
+    }, {
+      "ingredient_name": "garlic"
+    }, {
+      "ingredient_name": "grapefruit"
+    }, {
+      "ingredient_name": "grapes"
+    }, {
+      "ingredient_name": "ham"
+    }, {
+      "ingredient_name": "lemon"
+    }, {
+      "ingredient_name": "lettuce"
+    }, {
+      "ingredient_name": "lime"
+    }, {
+      "ingredient_name": "lobster"
+    }, {
+      "ingredient_name": "mango"
+    }, {
+      "ingredient_name": "milk"
+    }, {
+      "ingredient_name": "mushrooms"
+    }, {
+      "ingredient_name": "oats"
+    }, {
+      "ingredient_name": "oil"
+    }, {
+      "ingredient_name": "olive"
+    }, {
+      "ingredient_name": "onion"
+    }, {
+      "ingredient_name": "orange"
+    }, {
+      "ingredient_name": "pasta"
+    }, {
+      "ingredient_name": "peach"
+    }, {
+      "ingredient_name": "peanut"
+    }, {
+      "ingredient_name": "peas"
+    }, {
+      "ingredient_name": "pecan"
+    }, {
+      "ingredient_name": "peppers"
+    }, {
+      "ingredient_name": "pineapple"
+    }, {
+      "ingredient_name": "pistachios"
+    }, {
+      "ingredient_name": "pork"
+    }, {
+      "ingredient_name": "potato"
+    }, {
+      "ingredient_name": "pumpkin"
+    }, {
+      "ingredient_name": "raspberry"
+    }, {
+      "ingredient_name": "rice"
+    }, {
+      "ingredient_name": "salmon"
+    }, {
+      "ingredient_name": "shrimp"
+    }, {
+      "ingredient_name": "soy"
+    }, {
+      "ingredient_name": "spinach"
+    }, {
+      "ingredient_name": "squash"
+    }, {
+      "ingredient_name": "strawberry"
+    }, {
+      "ingredient_name": "sugar"
+    }, {
+      "ingredient_name": "sweet potato"
+    }, {
+      "ingredient_name": "tofu"
+    }, {
+      "ingredient_name": "tomato"
+    }, {
+      "ingredient_name": "tuna"
+    }, {
+      "ingredient_name": "turkey"
+    }, {
+      "ingredient_name": "vinegar"
+    }, {
+      "ingredient_name": "walnuts"
+    }, {
+      "ingredient_name": "watermelon"
+    }, {
+      "ingredient_name": "wine"
+    }, {
+      "ingredient_name": "yogurt"
+    }, {
+      "ingredient_name": "zucchini"
+    }]
+  }
+}
+```
+
+### Success Response JSON 200 OK (Searchable Ingredients)
+```json
+{
+  "error": false,
+  "data": {
+    "ingredients": [{
+      "id": 1001,
+      "name": "butter"
+    }, {
+      "id": 1004,
+      "name": "blue cheese"
+    }, {
+      "id": 1006,
+      "name": "brie cheese"
+    }, {
+      "id": 1009,
+      "name": "cheddar cheese"
+    }, {
+      "id": 1011,
+      "name": "colby jack cheese"
+    }, {
+      "id": 1012,
+      "name": "cottage cheese"
+    }, {
+      "id": 1017,
+      "name": "cream cheese"
+    },...]
+  }
+}
+```
+
 # <a name="category-api"></a>Category API Calls
+## Get Categories
+
+**Description**: Get the list of categories from the database. Ids correspond to those that can be used when searching recipes
+
+Title | Get Categories
+:---------- | :--------------------
+**URL** | ```/categories```
+**Method** | ```GET```
+**URL Parameters** | none
+**Success Response** | **Code** 200 OK
+**Notes** |
+
+### Success Response JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "categories": [{
+      "id": 1,
+      "name": "vegetarian"
+    }, {
+      "id": 2,
+      "name": "vegan"
+    }, {
+      "id": 3,
+      "name": "gluten free"
+    }, {
+      "id": 4,
+      "name": "dairy free"
+    }, {
+      "id": 5,
+      "name": "main course"
+    }, {
+      "id": 6,
+      "name": "side dish"
+    }, {
+      "id": 7,
+      "name": "dessert"
+    }, {
+      "id": 8,
+      "name": "appetizer"
+    }, {
+      "id": 9,
+      "name": "salad"
+    }, {
+      "id": 10,
+      "name": "bread"
+    }, {
+      "id": 11,
+      "name": "breakfast"
+    }, {
+      "id": 12,
+      "name": "soup"
+    }, {
+      "id": 13,
+      "name": "beverage"
+    }, {
+      "id": 14,
+      "name": "sauce"
+    }, {
+      "id": 15,
+      "name": "drink"
+    }, {
+      "id": 16,
+      "name": "african"
+    }, {
+      "id": 17,
+      "name": "chinese"
+    }, {
+      "id": 18,
+      "name": "japanese"
+    }, {
+      "id": 19,
+      "name": "korean"
+    }, {
+      "id": 20,
+      "name": "thai"
+    }, {
+      "id": 21,
+      "name": "indian"
+    }, {
+      "id": 22,
+      "name": "vietnamese"
+    }, {
+      "id": 23,
+      "name": "british"
+    }, {
+      "id": 24,
+      "name": "irish"
+    }, {
+      "id": 25,
+      "name": "french"
+    }, {
+      "id": 26,
+      "name": "italian"
+    }, {
+      "id": 27,
+      "name": "mexican"
+    }, {
+      "id": 28,
+      "name": "spanish"
+    }, {
+      "id": 29,
+      "name": "middle eastern"
+    }, {
+      "id": 30,
+      "name": "jewish"
+    }, {
+      "id": 31,
+      "name": "american"
+    }, {
+      "id": 32,
+      "name": "cajun"
+    }, {
+      "id": 33,
+      "name": "southern"
+    }, {
+      "id": 34,
+      "name": "greek"
+    }, {
+      "id": 35,
+      "name": "german"
+    }, {
+      "id": 36,
+      "name": "nordic"
+    }, {
+      "id": 37,
+      "name": "eastern european"
+    }, {
+      "id": 38,
+      "name": "caribbean"
+    }, {
+      "id": 39,
+      "name": "latin american"
+    }]
+  }
+}
+```

@@ -7,13 +7,12 @@ var Ingredient = require('../models/ingredient');
 var Instruction = require('../models/instruction');
 var Category_Recipe = require('../models/category_recipe');
 var Ingredient_Recipe = require('../models/ingredient_recipe');
-var SimilarIngredient = require('../models/similaringredient');
+var SimilarIngredient = require('../models/similar_ingredient');
 var Comment = require('../models/comment');
 var Auth = require('../lib/auth');
+var Pagination = require('../lib/pagination');
 var convert = require('convert-units');
 var pluralize = require('pluralize');
-var Ing = require('../similaringredients');
-//var data = require('../jsonfiles/recipes-6.json');
 var Fuse = require('fuse.js');
 
 router.get('/:recipeId', function(req, res, next){
@@ -72,12 +71,15 @@ router.post('/:recipeId/comments', function(req, res, next){
 });
 
 router.get('/:recipeId/comments', function(req, res, next){
+    const {page} = req.query;
     Recipe.where({id: req.params.recipeId}).fetch().then(function(r){
         if(r){
             bookshelf.transaction(function(t){
                 var options = {transacting: t};
                 Comment.where({recipe_id: req.params.recipeId}).orderBy('time_added', 'ASC').fetchAll({withRelated: ['user']}).then(function(comments){
-                    res.status(200).json({error: false, data: {comments: comments.mask(Comment.forge().masks.toRecipeWithUser)}});
+                    var paged = Pagination.commentPage(comments, page);
+                    res.status(200).json({error: false, data: {comments: paged[0].mask(Comment.forge().masks.toRecipeWithUser), pagination: paged[1]}});
+                    //res.status(200).json({error: false, data: {comments: comments.mask(Comment.forge().masks.toRecipeWithUser)}});
                 }).then(t.commit).catch(t.rollback);
             }).catch(function(err){
                 res.status(500).json({error: true, data: {message: err.message}});
@@ -90,7 +92,7 @@ router.get('/:recipeId/comments', function(req, res, next){
 
 
 router.get('/', function(req, res, next){
-    const {category, excludes, includes, keyword, search} = req.query;
+    const {category, excludes, includes, keyword, search, page} = req.query;
     if(!category){
         var c = null;
     } else if(category.constructor !== Array){
@@ -189,9 +191,9 @@ router.get('/', function(req, res, next){
                         }));
                     }
                     Promise.all(promises).then(function(){
-                        res.status(200).json({error: false, data: {recipes: finalRecipes}});
+                        var paged = Pagination.recipePage(finalRecipes, page);
+                        res.status(200).json({error: false, data: {recipes: paged[0], pagination: paged[1]}});
                     });
-
                 });
             } else {
                 if(keyword){
@@ -234,7 +236,8 @@ router.get('/', function(req, res, next){
                             }
                             Promise.all(proms).then(function(){
                                 coll.reset(modelList2);
-                                res.status(200).json({error: false, data: {recipes: coll}});
+                                var paged = Pagination.recipePage(coll, page);
+                                res.status(200).json({error: false, data: {recipes: paged[0], pagination: paged[1]}});
                             });
                         });
                     }
@@ -247,7 +250,6 @@ router.get('/', function(req, res, next){
                 Recipe.query(function(qb){
                     var voteandsave = bookshelf.knex.raw('hasSaved(?, id) as saved, getVote(?, id) as vote', [uid, uid]);
                     if(include && exclude){
-                        console.log('has both');
                         var query = '(';
                         for(var i = 0; i < include.length; i++){
                             if(i == 0){
@@ -259,7 +261,7 @@ router.get('/', function(req, res, next){
                         query += ') as include_count';
                         var incl = bookshelf.knex.raw(query);
                         var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
-                            this.select('ingredient_id').from('similaringredient').whereIn('ingredient_name', exclude);
+                            this.select('ingredient_id').from('similar_ingredient').whereIn('ingredient_name', exclude);
                         }).andWhere(function(){
                             this.whereRaw('recipe_id = recipe.id');
                         }).as('exclude_count');
@@ -278,7 +280,6 @@ router.get('/', function(req, res, next){
                         }
 
                     } else if(include){
-                        console.log('has include');
                         var query = '(';
                         for(var i = 0; i < include.length; i++){
                             if(i == 0){
@@ -302,9 +303,8 @@ router.get('/', function(req, res, next){
                         }
 
                     } else {
-                        console.log('has exclude');
                         var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
-                            this.select('ingredient_id').from('similaringredient').whereIn('ingredient_name', exclude);
+                            this.select('ingredient_id').from('similar_ingredient').whereIn('ingredient_name', exclude);
                         }).andWhere(function(){
                             this.whereRaw('recipe_id = recipe.id');
                         }).as('exclude_count');
@@ -319,14 +319,29 @@ router.get('/', function(req, res, next){
                         }
 
                     }
-                }).fetchAll().then(function(recipe){
-                    res.status(200).json({error: false, data: {recipes: recipe}});
+                }).fetchAll().then(function(recipes){
+                    var paged = Pagination.recipePage(recipes, page);
+                    res.status(200).json({error: false, data: {recipes: paged[0], pagination: paged[1]}});
                 }).catch(function(err){
                     res.status(500).json({error: true, data: {message: err.message}});
                 });
             } else {
                 res.status(400).json({error: true, data: {message: 'Need to specify at least one ingredient'}});
             }
+        } else if (search == 'popular'){
+            Recipe.query(function(qb){
+                var voteandsave = bookshelf.knex.raw('hasSaved(?, id) as saved, getVote(?, id) as vote', [uid, uid]);
+                if(uid){
+                    return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', voteandsave)
+                             .orderBy('score', 'DESC');
+                } else {
+                    return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score')
+                             .orderBy('score', 'DESC');
+                }
+            }).fetchAll().then(function(recipes){
+                var paged = Pagination.recipePage(recipes, page);
+                res.status(200).json({error: false, data: {recipes: paged[0], pagination: paged[1]}});
+            });
         } else {
             res.status(400).json({error: true, data: {message: 'Need to choose a type'}});
         }
@@ -334,7 +349,7 @@ router.get('/', function(req, res, next){
 
 });
 
-/* hash for category ids
+/*hash for category ids
 var categories = {};
 categories.vegetarian = 1;
 categories.vegan = 2;
@@ -379,31 +394,8 @@ categories.nordic = 36;
 categories["eastern european"] = 37;
 categories.caribbean = 38;
 categories["latin american"] = 39;
-*/
 
-/* populate the similar ingredients based on the provided json
-router.get('/makeSimilar', function(req, res, next){
-    var similar = Ing.ingObj;
-    var keys = Object.keys(similar);
-    var promises = [];
-    for(var j = 0; j < keys.length; j++){
-        var list = similar[keys[j]];
-        var good_key = keys[j].replace(/_/g, " ").trim();
-        for(var i = 0; i < list.length; i++){
-            promises.push(SimilarIngredient.forge({ingredient_name: good_key, ingredient_id: list[i]}).save());
-        }
-    }
-    Promise.all(promises).then(function(){
-        SimilarIngredient.fetchAll().then(function(ingredients){
-            console.log(ingredients.toJSON());
-            res.status(200).json({error: false, data: {recipe: "yay"}});
-        });
-    }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
-    });
-});*/
 
-/*original code to load recipes from the json files in the jsonfiles folder
 router.get('/', function(req, res, next){
     const recipes = data.body.recipes;
 
@@ -487,6 +479,7 @@ function addRecipe(recipe) {
             }
             return Promise.all(helpers);
         }).then(t.commit).catch(t.rollback);
-    });*/
+    });
+}*/
 
 module.exports = router;

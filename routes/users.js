@@ -42,7 +42,7 @@ router.post('/token', function(req, res, next){
             if(t){
                 console.log(1);
                 Token.forge({token: jti}).save().then(function(jwtid){
-                    res.status(200).json({error: false, data: {token: t}});
+                    res.status(200).json({error: false, data: {token: t, user: valUser.id}});
                 });
             } else {
                 res.status(500).json({error: true, data: {message: err.message}});
