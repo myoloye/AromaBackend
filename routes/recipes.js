@@ -13,7 +13,17 @@ var Auth = require('../lib/auth');
 var Pagination = require('../lib/pagination');
 var convert = require('convert-units');
 var pluralize = require('pluralize');
+pluralize.addPluralRule('tbsp', 'tbsps');
+pluralize.addPluralRule('tsp', 'tsps');
+var cloudinary = require('cloudinary');
 var Fuse = require('fuse.js');
+var FriedChicken = require('../friedchicken.js');
+
+cloudinary.config({
+  cloud_name: "insert cloud name",
+  api_key: "insert api key",
+  api_secret: "insert api secret"
+});
 
 router.get('/:recipeId', function(req, res, next){
     const {recipeId} = req.params;
@@ -90,6 +100,31 @@ router.get('/:recipeId/comments', function(req, res, next){
     });
 });
 
+router.post('/', function(req, res, next){
+    const {recipe} = req.body;
+    var getId = Auth.getUserId(req.headers.authorization);
+    getId.then(function(uid){
+        if(uid){
+            cloudinary.v2.uploader.upload(recipe.imagebase64, {width: 556, height: 370, gravity: "auto", crop: "fill"}, function(error, result) {
+                if(error){
+                    res.status(400).json({error: true, data: {message: "Error uploading image"}});
+                } else {
+                    const image_url = result.url;
+                    delete recipe.imagebase64;
+                    recipe.image_url = image_url;
+                    recipe.user_id = uid;
+                    addRecipe(recipe).then(function(item){
+                        res.status(200).json({error: false, data: {recipe_id: item}});
+                    }).catch(function(err){
+                        res.status(500).json({error: true, data: {message: err.message}});
+                    });
+                }
+            });
+        } else {
+            res.status(401).json({error: true, data: {message: 'Invalid authorization'}});
+        }
+    })
+});
 
 router.get('/', function(req, res, next){
     const {category, excludes, includes, keyword, search, page} = req.query;
@@ -349,6 +384,84 @@ router.get('/', function(req, res, next){
 
 });
 
+function addRecipe(recipe) {
+    return bookshelf.transaction(function(t){
+        var options = {transacting: t};
+        var recipeObj = {title: recipe.title, duration: recipe.readyInMinutes, image_url: recipe.image_url, source_url: recipe.sourceUrl, source: recipe.sourceName, user_id: recipe.user_id, servings: recipe.servings, description: recipe.description};
+        return Recipe.forge(recipeObj).save(null, options).then(function(r){
+            var helpers = [];
+            if(recipe.instructions.length > 0){
+                var instructions = recipe.instructions;
+                for(var i = 0; i < instructions.length; i++){
+                    helpers.push(Instruction.forge({recipe_id: r.id, step_num: i + 1, instruction: instructions[i].step}).save(null, options));
+                }
+            }
+            if(recipe.vegetarian === true){
+                helpers.push(Category_Recipe.forge({recipe_id: r.id, category_id: 1}).save(null, options));
+            }
+            if(recipe.vegan === true){
+                helpers.push(Category_Recipe.forge({recipe_id: r.id, category_id: 2}).save(null, options));
+            }
+            if(recipe.glutenFree === true){
+                helpers.push(Category_Recipe.forge({recipe_id: r.id, category_id: 3}).save(null, options));
+            }
+            if(recipe.dairyFree === true){
+                helpers.push(Category_Recipe.forge({recipe_id: r.id, category_id: 4}).save(null, options));
+            }
+            var categories = recipe.categories;
+            for(var i = 0; i < categories.length; i++){
+                helpers.push(Category_Recipe.forge({recipe_id: r.id, category_id: categories[i]}).save(null, options));
+            }
+            var ingredients = recipe.ingredients;
+            var measures = ['ml', 'l', 'tsp', 'Tbsp', 'fl-oz', 'cup', 'pnt', 'qt', 'gal', 'g', 'kg', 'oz', 'lb'];
+            for(var i = 0; i < ingredients.length; i++){
+                var ing = ingredients[i];
+                var ingData = {};
+
+                ingData.recipe_id = r.id;
+                if(ing.id === null){
+                    ingData.ingredient_id = 0;
+                } else {
+                    ingData.ingredient_id = ing.id;
+                }
+
+                if(ing.extra_info){
+                    ingData.extra_info = ing.extra_info;
+                }
+
+                var unit;
+                var hasRealUnit = true;
+                if(!measures.includes(ing.unit)){
+                    if(ing.unit){
+                        unit = pluralize(ing.unit, ing.amount);
+                    } else {
+                        hasRealUnit = false;
+                        unit = pluralize(ing.name, ing.amount);
+                    }
+
+                } else {
+                    unit = ing.unit;
+                    if(['cup', 'Tbsp', 'tsp'].includes(unit)){
+                        unit = pluralize(ing.unit, ing.amount);
+                    }
+                }
+                ingData.amount = ing.amount;
+                ingData.unit = unit;
+                if(hasRealUnit){
+                    ingData.original_string = ingData.amount + " " + ingData.unit + " " + ing.name;
+                } else {
+                    ingData.original_string = ingData.amount + " " + ingData.unit;
+                }
+                if(ingData.extra_info){
+                    ingData.original_string = ingData.original_string + ", " + ingData.extra_info;
+                }
+                helpers.push(Ingredient_Recipe.forge(ingData).save(null, options));
+            }
+            return Promise.all(helpers).then(function(){return r.id;});
+        }).then(t.commit).catch(t.rollback);
+    });
+}
+
 /*hash for category ids
 var categories = {};
 categories.vegetarian = 1;
@@ -414,7 +527,7 @@ router.get('/', function(req, res, next){
 function addRecipe(recipe) {
     return bookshelf.transaction(function(t){
         var options = {transacting: t};
-        var recipeObj = {title: recipe.title, duration: recipe.readyInMinutes, image_url: recipe.image, source_url: recipe.sourceUrl, source: recipe.sourceName, spoonacular_id: recipe.id};
+        var recipeObj = {servings: recipe.servings, title: recipe.title, duration: recipe.readyInMinutes, image_url: recipe.image, source_url: recipe.sourceUrl, source: recipe.sourceName, spoonacular_id: recipe.id};
         return Recipe.forge(recipeObj).save(null, options).then(function(r){
             var helpers = [];
             if(recipe.analyzedInstructions.length > 0){
@@ -465,15 +578,11 @@ function addRecipe(recipe) {
                 var unit;
                 if(ing.unit === ""){
                     unit = pluralize(ing.name, ing.amount);
-                    ingData.us_amount = ing.amount;
-                    ingData.metric_amount = ing.amount;
-                    ingData.us_unit = unit;
-                    ingData.metric_unit = unit;
+                    ingData.amount = ing.amount;
+                    ingData.unit = unit;
                 } else {
-                    ingData.us_amount = ing.measures.us.amount;
-                    ingData.metric_amount = ing.measures.metric.amount;
-                    ingData.us_unit = ing.measures.us.unitShort;
-                    ingData.metric_unit = ing.measures.metric.unitShort;
+                    ingData.amount = ing.amount;
+                    ingData.unit = ing.unitShort;
                 }
                 helpers.push(Ingredient_Recipe.forge(ingData).save(null, options));
             }

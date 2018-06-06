@@ -2,6 +2,7 @@
 
 * [Downloading & Installing](#download-install)
 * [Setting up the Database](#database)
+* [Request Headers](#headers)
 * [Authorization & Authentication](#authorization)
 * [User API Calls](#user-api)
   * [Register](#register)
@@ -15,6 +16,7 @@
   * [Save, Unsave, or Vote on a Recipe](#save-unsave-vote)
 * [Recipe API Calls](#recipe-api)
   * [Search for Recipes](#search-recipe)
+  * [Upload a New Recipe](#upload)
   * [Get Recipe Details](#recipe-details)
   * [Post a Comment on a Recipe](#post-comment)
   * [Get Recipe Comments](#get-comments)
@@ -42,6 +44,14 @@ To pre-populate the database with recipes, categories, and ingredients, import t
 * category_recipe.sql
 * ingredient_recipe.sql
 * instructions.sql
+
+# <a name="headers"></a>Request Headers
+
+All API calls send and return JSON. The following headers are required with each request:
+
+```Accept: application/json```
+
+```Content-Type: application/json```
 
 # <a name="authorization"></a>Authorization & Authentication
 
@@ -606,6 +616,100 @@ Title | Search for Recipes
   }
 }
 ```
+## <a name="upload"></a>Upload a Recipe
+**Description**: Uploads a new recipe to the Database
+
+Title | Upload a Recipe
+:---------- | :--------------------
+**URL** | ```/recipes```
+**Method** | ```POST```
+**URL Parameters** | none
+**Success Response** | **Code**: 200 OK
+**Error Response** | **Code**: 400 BAD REQUEST
+**Notes** | An ingredient object can take a couple different formats. The first is an ingredient with a standard unit of measure, such as buttermilk and kosher salt in the example. The second is an ingredient with a non-standard unit, such as butter in the example. The third is an ingredient where the ingredient name is also the unit, such as whole chicken in the example. Ingredients can also have extra supporting information such as the "3 1/4 - 4 pounds" in the whole chicken example
+
+### Sample Request JSON
+```json
+{
+    "recipe": {
+        "title": "Buttermilk-Marinated Chicken",
+        "vegetarian": false,
+        "vegan": false,
+        "dairyFree": false,
+        "glutenFree": true,
+        "sourceUrl": "https://cooking.nytimes.com/recipes/1018731-buttermilk-marinated-roast-chicken",
+        "sourceName": "New York Times Cooking",
+        "description": "This recipe, adapted from Samin Nosrat's \"Salt, Fat, Acid, Heat\", is inspired by the Southern grandma method of marinating chicken overnight in buttermilk before frying it. You're roasting here, but the buttermilk and salt still work like a brine, tenderizing the meat on multiple levels to yield an unbelievably juicy chicken.",
+        "readyInMinutes": 105,
+        "servings": 4,
+        "categories": [5, 31],
+        "ingredients": [
+            {
+                "id": 5006,
+                "name": "whole chicken",
+                "amount": 1,
+                "extra_info": "3 1/2 - 4 pounds"
+            },
+            {
+                "id": 1230,
+                "name": "buttermilk",
+                "amount": 2,
+                "unit": "cup"
+            },
+            {
+                "id": 1082047,
+                "name": "kosher salt",
+                "amount": 3,
+                "unit": "Tbsp"
+            },
+            {
+                "id": 1001,
+                "name": "butter",
+                "amount": 1,
+                "unit": "stick"
+            }
+        ],
+        "instructions": [
+            {
+                "step": "The day before you want to cook the chicken, remove the wingtips by cutting through the first wing joint with poultry shears or a sharp knife. Reserve for stock. Season chicen generously with salt and let it sit for 30 minutes."
+            },
+            {
+                "step": "Stir 2 tablespoons kosher salt or 4 teaspoons fine sea salt into the buttermilk to dissolve. Place the chicken in a gallon-size resealable plastic bag and pour in the buttermilk. (If the chicken won't fit in a gallon-size bag, double up two plastic produce bags to prevent leaks and tie the bag with twine.)"
+            },
+            {
+                "step": "Seal the baag, squish the buttermilk all around the chicken, place on a rimmed plate, nd refrigerate for 12 to 24 hours. If you're so inclined, you can turn the bag periodically so every part of the chicken gets marinated, but that's not essential"
+            },
+            {
+                "step": "Pull the chicken from the fridge an hour before you plan to cook it. Heat the oven to 425 degrees with a rack set in the center position."
+            },
+            {
+                "step": "Remove the chicken from the plastic bag and scrape off as much buttermilk as you can without being obsessive. Tightly tie together the legs with a piece of butcher's twine. Place the chicken in a 10-inch cast-iron skillet or a shallow roasting pan."
+            },
+            {
+                "step": "Slide the pan all the way to the back of the oven on the center rack. Rotate the pan so that the legs are pointing toward the center of the oven. (The back corners tend to be the hottest spots in the oven, so this orientation protects the breast from overcooking before the legs are done.) Pretty quickly you should hear the chicken sizzling."
+            },
+            {
+                "step": "After about 20 minutes, when the chicken starts to brown, reduce the heat to 400 degrees and continue roasting for 10 minutes."
+            },
+            {
+                "step": "Move the pan so the legs are facing the  right corner of the oven. Continue cooking for another 30 minutes or so, until the chicken is brown all over and the juices run clear when you insert a knife down to the bone between the leg and the thigh. If the skin is getting too brown before it is cooked through, use a foil tent. Remov it to a platter and let it rest for 10 minutes before carving and serving."
+            }
+        ],
+        "imagebase64": "data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4..."
+    }
+}
+```
+
+### Success Response JSON 200 OK
+```json
+{
+  "error": false,
+  "data": {
+    "recipe": 901
+  }
+}
+```
+
 
 ## <a name="recipe-details"></a>Get Recipe Details
 

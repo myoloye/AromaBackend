@@ -19,6 +19,7 @@ CREATE TABLE Recipe(
     title varchar(150) not null,
     description varchar(500),
     duration varchar(10) not null,
+    servings integer;
     image_url varchar(300),
     user_id integer,
     source_url varchar(300),
@@ -89,10 +90,8 @@ CREATE TABLE Ingredient_Recipe(
     ingredient_id integer not null,
     recipe_id integer not null,
     original_string varchar(150) not null,
-    us_amount decimal(8, 3) not null,
-    us_unit varchar(15) not null,
-    metric_amount decimal(8, 3) not null,
-    metric_unit varchar(15) not null,
+    amount decimal(8, 3) not null,
+    unit varchar(15) not null,
     extra_info varchar(150),
     foreign key(recipe_id) references Recipe(id),
     foreign key(ingredient_id) references Ingredient(id)

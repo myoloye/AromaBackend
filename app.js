@@ -1,4 +1,5 @@
 var createError = require('http-errors');
+var bodyParser = require('body-parser');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -15,10 +16,9 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '1000mb', type:'application/json', parameterLimit:5000000}));
+app.use(bodyParser.urlencoded({limit: '1000mb', type:'application/json', extended: true, parameterLimit:5000000}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
