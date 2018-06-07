@@ -12,7 +12,7 @@
   }
 }
 ```
-<hr>
+
 ### Login
 
 ```POST /users/token```
@@ -26,19 +26,19 @@
   }
 }
 ```
-<hr>
+
 ### Logout
 
 ```POST /users/logout```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Get User Profile
 
 ```GET /users/:id```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Edit About Me
 
 ```POST /users/:id```
@@ -50,107 +50,107 @@
   "about": "add bio here"
 }
 ```
-<hr>
+
 ### Get List of Categories Subscribed to
 
 ```GET /users/:id/subscriptions```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Get List of Liked Recipes
 
 ```GET /users/:id/recipes?type=liked```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Get List of Disliked Recipes
 
 ```GET /users/:id/recipes?type=disliked```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Get List of Saved Recipes
 
 ```GET /users/:id/recipes?type=saved```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Get List of Recipes a User Uploaded
 
 ```GET /users/:id/recipes?type=uploaded```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Like a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=like```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Dislike a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=dislike```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Unlike or Un-dislike a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=neutralize```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Save a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=save```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Unsave a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=unsave```
 
 **Headers**: Content-Type, Accept, Authorization
-<hr>
+
 ### Get the First Page of Popular Recipes
 ```GET /recipes?search=popular```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Get a Specific Page of Popular Recipes
 ```GET /recipes?search=popular&page=:pagenum```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes with a Specific Category
 ```GET /recipes?search=category&category=:categoryId```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes by Keyword
 ```GET /recipes?search=category&keyword=:keyword```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes with More Than One Category
 ```GET /recipes?search=category&category=:category1Id&:cagetory2Id```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes with More Than One Category and by Keyword
 ```GET /recipes?search=category&category=:category1Id&category2Id?keyword=:keyword```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes that Include a Specific Ingredient
 ```GET /recipes?search=ingredient&includes=:ingredientName```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes that Exclude a Specific Ingredient
 ```GET /recipes?search=ingredient&excludes=:ingredientName```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Search for Recipes that Both Include and Exclude Specific Ingredients
 ```GET /recipes?search=ingredient&includes=:ingredient1Name&includes=:ingredient2Name&excludes=ingredient3Name&excludes=ingredient4Name```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Upload a Recipe
 ```POST /recipes```
 
@@ -225,14 +225,14 @@
     }
 }
 ```
-<hr>
+
 ### Get a Single Recipe with All Details
 ```GET /recipes/:id```
 
 **Example**: Get recipe with id 1<br>```/recipes/1```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
-<hr>
+
 ### Get a Recipe's First Page of Comments
 ```GET /recipes/:id/comments```
 
@@ -240,7 +240,6 @@
 ```/recipes/1/comments```
 
 **Headers**: Content-Type, Accept
-<hr>
 
 ### Get a Specific Page of a Recipe's Comments
 
@@ -249,7 +248,7 @@
 **Example**: Get page 2 of the comments on recipe with id 1<br>```/recipes/1/comments?page=2```<br>
 
 **Headers**: Content-Type, Accept
-<hr>
+
 ### Post a Comment
 ```POST /recipes/:id/comments```<br>
 
