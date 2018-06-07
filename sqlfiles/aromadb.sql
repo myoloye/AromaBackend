@@ -18,7 +18,7 @@ CREATE TABLE Recipe(
     id integer auto_increment primary key,
     title varchar(150) not null,
     description varchar(500),
-    duration varchar(10) not null,
+    duration integer not null,
     servings integer;
     image_url varchar(300),
     user_id integer,
@@ -28,7 +28,7 @@ CREATE TABLE Recipe(
     likes integer not null default '0',
     dislikes integer not null default '0',
     spoonacular_id integer,
-    foreign key (user_id) references User(id)
+    foreign key (user_id) references User(id) on delete cascade
 );
 
 CREATE TABLE Ingredient(
@@ -49,8 +49,8 @@ CREATE TABLE Votes(
     user_id integer not null,
     recipe_id integer not null,
     type char(1) not null,
-    foreign key (user_id) references User(id),
-    foreign key (recipe_id) references Recipe(id),
+    foreign key (user_id) references User(id) on delete cascade,
+    foreign key (recipe_id) references Recipe(id) on delete cascade,
     unique key (user_id, recipe_id)
 );
 
@@ -58,8 +58,8 @@ CREATE TABLE Recipe_User_Saved(
     id integer auto_increment primary key,
     user_id integer not null,
     recipe_id integer not null,
-    foreign key (user_id) references User(id),
-    foreign key (recipe_id) references Recipe(id)
+    foreign key (user_id) references User(id) on delete cascade,
+    foreign key (recipe_id) references Recipe(id) on delete cascade
 );
 
 CREATE TABLE Category(
@@ -71,7 +71,7 @@ CREATE TABLE Category_User(
     id integer auto_increment primary key,
     user_id integer not null,
     category_id integer not null,
-    foreign key (user_id) references User(id),
+    foreign key (user_id) references User(id) on delete cascade,
     foreign key (category_id) references Category(id),
     unique key(user_id, category_id)
 );
@@ -80,8 +80,8 @@ CREATE TABLE Category_Recipe(
     id integer auto_increment primary key,
     recipe_id integer not null,
     category_id integer not null,
-    foreign key (recipe_id) references Recipe(id),
-    foreign key (category_id) references Category(id),
+    foreign key (recipe_id) references Recipe(id) on delete cascade,
+    foreign key (category_id) references Category(id) on delete cascade,
     unique key(recipe_id, category_id)
 );
 
@@ -93,7 +93,7 @@ CREATE TABLE Ingredient_Recipe(
     amount decimal(8, 3) not null,
     unit varchar(15) not null,
     extra_info varchar(150),
-    foreign key(recipe_id) references Recipe(id),
+    foreign key(recipe_id) references Recipe(id) on delete cascade,
     foreign key(ingredient_id) references Ingredient(id)
 );
 
@@ -101,9 +101,9 @@ CREATE TABLE Instruction(
     id integer auto_increment primary key,
     recipe_id integer not null,
     step_num integer not null,
-    instruction varchar(300) not null,
+    instruction varchar(1000) not null,
     unique key(recipe_id, step_num),
-    foreign key (recipe_id) references Recipe(id)
+    foreign key (recipe_id) references Recipe(id) on delete cascade
 );
 
 CREATE TABLE Comment(
@@ -112,8 +112,8 @@ CREATE TABLE Comment(
     user_id integer not null,
     comment varchar(300) not null,
     time_added timestamp not null default current_timestamp,
-    foreign key(recipe_id) references Recipe(id),
-    foreign key(user_id) references User(id)
+    foreign key(recipe_id) references Recipe(id) on delete cascade,
+    foreign key(user_id) references User(id) on delete cascade
 );
 
 DELIMITER //

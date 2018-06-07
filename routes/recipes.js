@@ -17,12 +17,12 @@ pluralize.addPluralRule('tbsp', 'tbsps');
 pluralize.addPluralRule('tsp', 'tsps');
 var cloudinary = require('cloudinary');
 var Fuse = require('fuse.js');
-var FriedChicken = require('../friedchicken.js');
+var CheckIt = require('checkit');
 
 cloudinary.config({
-  cloud_name: "insert cloud name",
-  api_key: "insert api key",
-  api_secret: "insert api secret"
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 router.get('/:recipeId', function(req, res, next){
@@ -68,7 +68,11 @@ router.post('/:recipeId/comments', function(req, res, next){
                             res.status(200).json({error: false, data: {comment: c}});
                         }).then(t.commit).catch(t.rollback);
                     }).catch(function(err){
-                        res.status(500).json({error: true, data: {message: err.message}});
+                        if(err instanceof CheckIt.Error){
+                            res.status(400).json({error: true, data: {message: err.toJSON()}});
+                        } else {
+                            res.status(500).json({error: true, data: {message: err.message}});
+                        }
                     });
                 } else {
                     res.status(401).json({error: true, data: {message: 'Invalid authorization'}});
@@ -89,7 +93,6 @@ router.get('/:recipeId/comments', function(req, res, next){
                 Comment.where({recipe_id: req.params.recipeId}).orderBy('time_added', 'ASC').fetchAll({withRelated: ['user']}).then(function(comments){
                     var paged = Pagination.commentPage(comments, page);
                     res.status(200).json({error: false, data: {comments: paged[0].mask(Comment.forge().masks.toRecipeWithUser), pagination: paged[1]}});
-                    //res.status(200).json({error: false, data: {comments: comments.mask(Comment.forge().masks.toRecipeWithUser)}});
                 }).then(t.commit).catch(t.rollback);
             }).catch(function(err){
                 res.status(500).json({error: true, data: {message: err.message}});
@@ -109,14 +112,18 @@ router.post('/', function(req, res, next){
                 if(error){
                     res.status(400).json({error: true, data: {message: "Error uploading image"}});
                 } else {
-                    const image_url = result.url;
+                    const image_url = result.secure_url;
                     delete recipe.imagebase64;
                     recipe.image_url = image_url;
                     recipe.user_id = uid;
                     addRecipe(recipe).then(function(item){
                         res.status(200).json({error: false, data: {recipe_id: item}});
                     }).catch(function(err){
-                        res.status(500).json({error: true, data: {message: err.message}});
+                        if(err instanceof CheckIt.Error){
+                            res.status(400).json({error: true, data: {message: err.toJSON()}});
+                        } else {
+                            res.status(500).json({error: true, data: {message: err.message}});
+                        }
                     });
                 }
             });

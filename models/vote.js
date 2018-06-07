@@ -15,7 +15,7 @@ var Vote = bookshelf.Model.extend({
     },
     recipe: function(){
         return this.belongsTo('Recipe');
-    }
+    },
 });
 
 module.exports = bookshelf.model('Vote', Vote);

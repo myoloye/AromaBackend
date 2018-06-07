@@ -11,6 +11,7 @@ var Token = require('../models/token');
 var Auth = require('../lib/auth');
 var uuidv4 = require('uuid/v4');
 var jwt = require('jsonwebtoken');
+var CheckIt = require('checkit');
 
 //add functionality to check that the username, email, and password aren't empty/null
 router.post('/', function(req, res, next){
@@ -21,7 +22,11 @@ router.post('/', function(req, res, next){
     }).then(function(user){
         res.status(200).json({error: false, data: {id: user.id}});
     }).catch(function(err){
-        res.status(500).json({error: true, data: {message: err.message}});
+        if(err instanceof CheckIt.Error){
+            res.status(400).json({error: true, data: {message: err.toJSON()}});
+        } else {
+            res.status(500).json({error: true, data: {message: err.message}});
+        }
     });
 });
 
@@ -38,7 +43,7 @@ router.post('/token', function(req, res, next){
     }).then(function(valUser){
         const jti = uuidv4();
         console.log(2);
-        jwt.sign({id: valUser.id}, 'replacewithrealsecretlater', {jwtid: jti}, function(err, t){
+        jwt.sign({id: valUser.id}, process.env.APPLICATION_SECRET, {jwtid: jti}, function(err, t){
             if(t){
                 console.log(1);
                 Token.forge({token: jti}).save().then(function(jwtid){
@@ -50,7 +55,7 @@ router.post('/token', function(req, res, next){
         });
     }).catch(function(err){
         if(err.name = 'PasswordMismatchError'){
-            res.status(400).json({error: true, data: {message: "Invalid Credentials"}});
+            res.status(400).json({error: true, data: {message: "Invalid credentials"}});
         } else {
             res.status(500).json({error: true, data: {message: err.message}});
         }
@@ -304,6 +309,8 @@ router.post('/:userId/recipes/:recipeId', Auth.authSameUser, function(req, res, 
                 } else {
                     res.status(404).json({error: true, data: {message: "Recipe does not exist"}});
                 }
+            }).catch(function(err){
+                res.status(500).json({error: true, data: {message: err.message}});
             });
         }
     }

@@ -15,6 +15,12 @@
 .env.development.local
 .env.test.local
 .env.production.local
+buttermilkchicken.jpg
+friedchicken.jpg
+friedchicken.js
+ImageTest.class
+ImageTest.java
+salad.png
 
 npm-debug.log*
 yarn-debug.log*
