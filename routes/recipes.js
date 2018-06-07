@@ -589,7 +589,14 @@ function addRecipe(recipe) {
                     ingData.unit = unit;
                 } else {
                     ingData.amount = ing.amount;
-                    ingData.unit = ing.unitShort;
+                    if(ing.unit === ing.measures.metric.unitLong){
+                        unit = ing.measures.metric.unitShort;
+                    } else if(ing.unit === ing.measures.us.unitLong){
+                        unit = ing.measures.us.unitShort;
+                    } else {
+                        unit = ing.unit;
+                    }
+                    ingData.unit = unit;
                 }
                 helpers.push(Ingredient_Recipe.forge(ingData).save(null, options));
             }

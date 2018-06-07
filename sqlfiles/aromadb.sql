@@ -19,8 +19,8 @@ CREATE TABLE Recipe(
     title varchar(150) not null,
     description varchar(500),
     duration integer not null,
-    servings integer;
-    image_url varchar(300),
+    servings integer not null;
+    image_url varchar(300) not null,
     user_id integer,
     source_url varchar(300),
     source varchar(50),
@@ -91,7 +91,7 @@ CREATE TABLE Ingredient_Recipe(
     recipe_id integer not null,
     original_string varchar(150) not null,
     amount decimal(8, 3) not null,
-    unit varchar(15) not null,
+    unit varchar(50) not null,
     extra_info varchar(150),
     foreign key(recipe_id) references Recipe(id) on delete cascade,
     foreign key(ingredient_id) references Ingredient(id)

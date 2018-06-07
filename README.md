@@ -1092,7 +1092,7 @@ Title | Get Ingredients
 }
 ```
 
-### Success Response JSON 200 OK (Searchable Ingredients)
+### Success Response JSON 200 OK (All Ingredients)
 ```json
 {
   "error": false,
