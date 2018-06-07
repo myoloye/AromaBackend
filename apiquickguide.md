@@ -1,4 +1,4 @@
-### Register a User
+## Register a User
 
 ```POST /users```
 
@@ -13,7 +13,7 @@
 }
 ```
 
-### Login
+## Login
 
 ```POST /users/token```
 
@@ -27,21 +27,29 @@
 }
 ```
 
-### Logout
+## Logout
 
 ```POST /users/logout```
 
 **Headers**: Content-Type, Accept, Authorization
 
-### Get User Profile
+## Get User Profile
 
 ```GET /users/:id```
 
+**Example**: Get the profile of the user with id 1
+
+```/users/1```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Edit About Me
+## Edit About Me
 
 ```POST /users/:id```
+
+**Example**: Edit the user profile with id 1
+
+```/users/1```
 
 **Headers**: Content-Type, Accept, Authorization<br>**Sample Request JSON**
 
@@ -51,107 +59,179 @@
 }
 ```
 
-### Get List of Categories Subscribed to
+## Get List of Categories Subscribed to
 
 ```GET /users/:id/subscriptions```
 
+**Example**: Get the categories user 1 is subscribed to
+
+```/users/1/subscriptions```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Get List of Liked Recipes
+## Get List of Liked Recipes
 
 ```GET /users/:id/recipes?type=liked```
 
+**Example**: Get the list of recipes user 1 liked
+
+```/users/1/recipes?type=liked```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Get List of Disliked Recipes
+## Get List of Disliked Recipes
 
 ```GET /users/:id/recipes?type=disliked```
 
+**Example**: Get the list of recipes user 1 has disliked
+
+```/users/1/recipes?type=disliked```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Get List of Saved Recipes
+## Get List of Saved Recipes
 
 ```GET /users/:id/recipes?type=saved```
 
+**Example**: Get the list of recipes user 1 has saved
+
+```/users/1/recipes?type=saved```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Get List of Recipes a User Uploaded
+## Get List of Recipes a User Uploaded
 
 ```GET /users/:id/recipes?type=uploaded```
 
+**Example**: Get the list of recipes user 1 has uploaded
+
+```/users/1/recipes?type=upload```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Like a Recipe
+## Like a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=like```
 
+**Example**: User 1 likes recipe 1
+
+```/users/1/recipes/1?action=like```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Dislike a Recipe
+## Dislike a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=dislike```
 
+**Example**: User 1 dislikes recipe 1
+
+```/users/1/recipes/1?action=dislike```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Unlike or Un-dislike a Recipe
+## Unlike or Un-dislike a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=neutralize```
 
+**Example**: User 1 reverts a previous like or dislike on recipe 1
+
+```/users/1/recipes/1?action=neutralize```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Save a Recipe
+## Save a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=save```
 
+**Example**: User 1 saves recipe 1
+
+```/users/1/recipes/1?action=save```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Unsave a Recipe
+## Unsave a Recipe
 ```POST /users/:userId/recipes/:recipeId?action=unsave```
 
+**Example**: User 1 unsaves recipe 1
+
+```/users/1/recipes/1?action=unsave```
+
 **Headers**: Content-Type, Accept, Authorization
 
-### Get the First Page of Popular Recipes
+## Get the First Page of Popular Recipes
 ```GET /recipes?search=popular```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Get a Specific Page of Popular Recipes
+## Get a Specific Page of Popular Recipes
 ```GET /recipes?search=popular&page=:pagenum```
 
+**Example**: Get page 2 of popular recipes
+
+```/recipes?search=popular&page=2```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes with a Specific Category
+## Search for Recipes with a Specific Category
 ```GET /recipes?search=category&category=:categoryId```
 
+**Example**: Get the first page of vegetarian recipes (caategory id 1)
+
+```/recipes?search=category&category=1```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes by Keyword
+## Search for Recipes by Keyword
 ```GET /recipes?search=category&keyword=:keyword```
 
+**Example**: Search for recipes that have the keyword 'cake'
+
+```/recipes?search=category&keyword=cake```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes with More Than One Category
+## Search for Recipes with More Than One Category
 ```GET /recipes?search=category&category=:category1Id&:cagetory2Id```
 
+**Example**: Search for vegetarian (1) main courses (5)
+
+```/recipes?search=category&category=1&category=5```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes with More Than One Category and by Keyword
+## Search for Recipes with More Than One Category and by Keyword
 ```GET /recipes?search=category&category=:category1Id&category2Id?keyword=:keyword```
 
+**Example**: Search for vegtarian (1) main courses (5) with the keyword 'pasta'
+
+```/recipes?search=category&category=1&category=5&keyword=pasta```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes that Include a Specific Ingredient
+## Search for Recipes that Include a Specific Ingredient
 ```GET /recipes?search=ingredient&includes=:ingredientName```
 
+**Example**: Search for recipes that include egg
+
+```/recipes?search=ingredient&includes=egg```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes that Exclude a Specific Ingredient
+## Search for Recipes that Exclude a Specific Ingredient
 ```GET /recipes?search=ingredient&excludes=:ingredientName```
 
+**Example**: Search for recipes that exclude egg
+
+```/recipes?search=ingredient&excludes=egg```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Search for Recipes that Both Include and Exclude Specific Ingredients
+## Search for Recipes that Both Include and Exclude Specific Ingredients
 ```GET /recipes?search=ingredient&includes=:ingredient1Name&includes=:ingredient2Name&excludes=ingredient3Name&excludes=ingredient4Name```
 
+**Example**: Search for recipes that include egg and butter and exclude chicken
+
+```/recipes?search=ingredient&includes=egg&includes=butter&excludes=chicken```
+
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Upload a Recipe
+## Upload a Recipe
 ```POST /recipes```
 
 **Headers**: Content-Type, Accept, Authorization<br>**Sample Request JSON**
@@ -226,14 +306,14 @@
 }
 ```
 
-### Get a Single Recipe with All Details
+## Get a Single Recipe with All Details
 ```GET /recipes/:id```
 
 **Example**: Get recipe with id 1<br>```/recipes/1```
 
 **Headers**: Content-Type, Accept, Authorization (optional)
 
-### Get a Recipe's First Page of Comments
+## Get a Recipe's First Page of Comments
 ```GET /recipes/:id/comments```
 
 **Example**: Get the first 100 comments on recipe with id 1<br>
@@ -241,7 +321,7 @@
 
 **Headers**: Content-Type, Accept
 
-### Get a Specific Page of a Recipe's Comments
+## Get a Specific Page of a Recipe's Comments
 
 ```GET /recipes/:id/comments?page=:pagenum```<br>
 
@@ -249,7 +329,7 @@
 
 **Headers**: Content-Type, Accept
 
-### Post a Comment
+## Post a Comment
 ```POST /recipes/:id/comments```<br>
 
 **Example**: Post a comment on the recipe with id 1<br>
@@ -265,3 +345,18 @@
   }
 }
 ```
+
+## Get the Full List of Ingredients
+```GET /ingredients```
+
+**Headers**: Content-Type, Accept
+
+## Get the List of Searchable Ingredients
+```GET /ingredients?type=searchable```
+
+**Headers**: Content-Type, Accept
+
+## Get the List of Caategories
+```GET /categories```
+
+**Headers**: Content-Type, Accept
