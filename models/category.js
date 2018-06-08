@@ -6,7 +6,7 @@ require('./recipe');
 bookshelf.plugin('visibility');
 
 var Category = bookshelf.Model.extend({
-    tableName: 'category',
+    tableName: 'Category',
 
     recipes: function(){
         return this.belongsToMany('Recipe');

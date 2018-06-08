@@ -19,8 +19,8 @@ CREATE TABLE Recipe(
     title varchar(150) not null,
     description varchar(500),
     duration integer not null,
-    servings integer not null;
-    image_url varchar(300) not null,
+    servings integer not null,
+    image_url varchar(300),
     user_id integer,
     source_url varchar(300),
     source varchar(50),
@@ -34,7 +34,7 @@ CREATE TABLE Recipe(
 CREATE TABLE Ingredient(
     id integer,
     name varchar(50),
-    primary key(id, name);
+    primary key(id, name)
 );
 
 CREATE TABLE Similar_Ingredient(
@@ -155,7 +155,7 @@ CREATE FUNCTION hasFood(id integer, food varchar(30)) returns INTEGER
 BEGIN
     DECLARE numMatches INTEGER;
 
-    SELECT count(*) into numMatches FROM ingredient_recipe WHERE ingredient_id IN (SELECT ingredient_id FROM similaringredient WHERE ingredient_name = food) AND recipe_id = id;
+    SELECT count(*) into numMatches FROM Ingredient_Recipe WHERE ingredient_id IN (SELECT ingredient_id FROM Similar_Ingredient WHERE ingredient_name = food) AND recipe_id = id;
 
     IF (numMatches > 0) THEN
     	SET numMatches = 1;
@@ -166,12 +166,12 @@ END//
 DELIMITER ;
 
 DELIMITER //
-CREATE FUNCTION getVote(uid integer, rid integer) returns char(1)
+CREATE OR REPLACE FUNCTION getVote(uid integer, rid integer) returns char(1)
 BEGIN
     DECLARE vote char(1);
-    SELECT type into vote from votes where user_id = uid and recipe_id = rid;
-    IF (type IS NULL) THEN
-        SET vote = 'n';
+    SELECT type into vote from Votes where user_id = uid and recipe_id = rid;
+    IF (vote is null) THEN
+        set vote = 'n';
     END IF;
 
     RETURN (vote);
@@ -183,7 +183,7 @@ CREATE FUNCTION hasSaved(uid integer, rid integer) returns boolean
 BEGIN
     DECLARE saved boolean;
     DECLARE tempid integer;
-    SELECT id into tempid from recipe_user_saved where user_id = uid and recipe_id = rid;
+    SELECT id into tempid from Recipe_User_Saved where user_id = uid and recipe_id = rid;
     IF (tempid IS NULL) THEN
         SET saved = 0;
     ELSE

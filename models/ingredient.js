@@ -4,7 +4,7 @@ require('./ingredient_recipe');
 require('./recipe');
 
 var Ingredient = bookshelf.Model.extend({
-    tableName: 'ingredient',
+    tableName: 'Ingredient',
 
     recipes: function(){
         return belongsToMany('Recipe').through('Ingredient_Recipe');

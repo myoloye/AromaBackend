@@ -1,4 +1,4 @@
-INSERT INTO `category_recipe` (`id`, `recipe_id`, `category_id`) VALUES
+INSERT INTO `Category_Recipe` (`id`, `recipe_id`, `category_id`) VALUES
 (2, 1, 1),
 (5, 1, 7),
 (1, 2, 1),
@@ -2381,5 +2381,5 @@ INSERT INTO `category_recipe` (`id`, `recipe_id`, `category_id`) VALUES
 (2412, 897, 3),
 (2413, 897, 8);
 
-ALTER TABLE `category_recipe`
+ALTER TABLE `Category_Recipe`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2414;

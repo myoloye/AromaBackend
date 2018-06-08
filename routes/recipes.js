@@ -233,7 +233,9 @@ router.get('/', function(req, res, next){
                         }));
                     }
                     Promise.all(promises).then(function(){
-                        var paged = Pagination.recipePage(finalRecipes, page);
+                        console.log(finalRecipes);
+                        var coll = Recipe.collection(finalRecipes)
+                        var paged = Pagination.recipePage(coll, page);
                         res.status(200).json({error: false, data: {recipes: paged[0], pagination: paged[1]}});
                     });
                 });
@@ -277,8 +279,8 @@ router.get('/', function(req, res, next){
                                 }));
                             }
                             Promise.all(proms).then(function(){
-                                coll.reset(modelList2);
-                                var paged = Pagination.recipePage(coll, page);
+                                var coll2 = Recipe.collection(modelList2);
+                                var paged = Pagination.recipePage(coll2, page);
                                 res.status(200).json({error: false, data: {recipes: paged[0], pagination: paged[1]}});
                             });
                         });
@@ -302,10 +304,10 @@ router.get('/', function(req, res, next){
                         }
                         query += ') as include_count';
                         var incl = bookshelf.knex.raw(query);
-                        var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
-                            this.select('ingredient_id').from('similar_ingredient').whereIn('ingredient_name', exclude);
+                        var excl = bookshelf.knex('Ingredient_Recipe').count('ingredient_id').whereIn('ingredient_id', function(){
+                            this.select('ingredient_id').from('Similar_Ingredient').whereIn('ingredient_name', exclude);
                         }).andWhere(function(){
-                            this.whereRaw('recipe_id = recipe.id');
+                            this.whereRaw('recipe_id = Recipe.id');
                         }).as('exclude_count');
                         if(uid){
                             return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', incl, excl, voteandsave)
@@ -345,10 +347,10 @@ router.get('/', function(req, res, next){
                         }
 
                     } else {
-                        var excl = bookshelf.knex('ingredient_recipe').count('ingredient_id').whereIn('ingredient_id', function(){
-                            this.select('ingredient_id').from('similar_ingredient').whereIn('ingredient_name', exclude);
+                        var excl = bookshelf.knex('Ingredient_Recipe').count('ingredient_id').whereIn('ingredient_id', function(){
+                            this.select('ingredient_id').from('Similar_Ingredient').whereIn('ingredient_name', exclude);
                         }).andWhere(function(){
-                            this.whereRaw('recipe_id = recipe.id');
+                            this.whereRaw('recipe_id = Recipe.id');
                         }).as('exclude_count');
                         if(uid){
                             return qb.select('id', 'title', 'image_url', 'likes', 'dislikes', 'score', excl, voteandsave)

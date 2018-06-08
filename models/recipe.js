@@ -6,7 +6,7 @@ require('./user');
 require('./ingredient');
 require('./ingredient_recipe');
 require('./category');
-require('./instruction');
+var Instruction = require('./instruction');
 require('./comment');
 
 bookshelf.plugin(mask);
@@ -70,19 +70,19 @@ var Recipe = bookshelf.Model.extend({
             }
         ]
     },
-    tableName: 'recipe',
+    tableName: 'Recipe',
 
     user: function(){
         return this.belongsTo('User');
     },
     ingredients: function(){
-        return this.belongsToMany('Ingredient').withPivot(['original_string', 'us_amount', 'us_unit', 'metric_amount', 'metric_unit', 'extra_info']);
+        return this.belongsToMany('Ingredient').withPivot(['original_string', 'amount', 'unit', 'extra_info']);
     },
     categories: function(){
         return this.belongsToMany('Category');
     },
     instructions: function(){
-        return this.hasMany('Instruction');
+        return this.hasMany('Instruction', 'recipe_id').orderBy('step_num', 'ASC');
     },
     comments: function(){
         return this.hasMany('Comment').orderBy('time_added', 'ASC');

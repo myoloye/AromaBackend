@@ -1,4 +1,4 @@
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1, 1, 1, 'Preheat oven to 350 degrees F. Grease a 9x13-inch baking pan; set aside.'),
 (2, 1, 2, 'In a small bowl whisk together the flour, baking soda and salt; set aside.'),
 (3, 8, 1, 'Preheat oven to 350 degrees F (175 degrees C).'),
@@ -301,7 +301,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (300, 50, 6, '3'),
 (301, 53, 3, 'Pour drained beef and sausage into a food processor and pulse mixture about 10 - 15 seconds until ground into small pieces, set aside. Return pot to medium-high heat, add in remaining 1 Tbsp olive oil. Once oil is hot, add onion and saute until golden, about 2 - 3 minutes, adding garlic during the last 30 seconds of sauteing.'),
 (302, 50, 7, 'Heat 1 tablespoon of the olive oil in a small pan and fry the onion gently for 6 to 8 minutes, or until golden and very soft.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (303, 53, 4, 'Remove from heat and add tomato puree, tomato paste, sugar, basil, crushed fennel seeds, oregano, thyme, marjoram, then season with 1 tsp salt and more to taste and 1/4 tsp freshly ground black pepper. Return to heat and bring mixture to a simmer, then reduce heat to low and simmer uncovered 45 minutes - 1 hour, stirring occasionally, until sauce has reduced and thickened slightly.Cook pasta to al dente according to directions listed on package (now is a good time to shred cheese).'),
 (304, 50, 8, 'Add the ground spices and garlic and cook for 2 more minutes.'),
 (305, 53, 5, 'Drain pasta (do not rinse) and once cool enough to handle, align noodles in a single layer on sheets of wax paper (you can also hang some of them over the colander used to strain pasta). In a mixing bowl using a fork, blend together Ricotta cheese, egg and parsley, set aside. In a mixing bowl or large ziploc bag, toss together mozzarella, Parmesan and Romano cheese, set aside.Preheat oven to 350 degrees. To assemble lasagna, evenly spread 1 cup ground beef pasta sauce into the bottom of a 13 x 9-inch baking dish. Align 4 - 5** lasagna noodles over sauce.'),
@@ -622,7 +622,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (620, 102, 6, 'Add spinach and rigatoni and cook for 4 minutes or until spinach wilts.Preheat broiler.'),
 (621, 102, 7, 'Place slices of Galbani Mozzarella cheese on top of skillet and place under broiler for 3-5 minutes.'),
 (622, 102, 8, 'Serve immediately.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (623, 105, 1, 'Place all of the ingredients in a food processor and blend until well incorporated.Refrigerated for 2 hours or so before serving.Adapted and inspired from food doodles and texanering baking'),
 (624, 103, 1, 'Preheat oven to 375 degrees F.'),
 (625, 103, 2, 'Combine the eggs, milk, vanilla, flour, baking powder and pinch of pumpkin pie spice in a blender and blend for 10-15 seconds (or place ingredients in a bowl and whisk until smooth and combined).'),
@@ -959,7 +959,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (962, 162, 2, 'Let cool.In large mixing bowl, add diced eggs, pickles, and celery.'),
 (963, 160, 5, 'Remove to a wire rack. For mustard dip, combine the remaining ingredients in a small bowl.'),
 (964, 156, 1, 'For the dumplings, heat oven to200C/180C fan/gas');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (965, 155, 5, 'Brush with reserved marinade. Grill or broil 15-20 minutes longer or until fish flakes easily with a fork.'),
 (966, 159, 4, 'Add the vanilla.Alternate between the flour mixture and eggnog, adding until all of the ingredients are incorporated.'),
 (967, 162, 3, 'Mix gently'),
@@ -1295,7 +1295,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1297, 209, 6, 'Pour the wine in to the pan and boil over a medium heat until the liquid has reduced by half. Slowly start adding the stock, a ladleful at a time, stirring well between each addition. Simmer for 2-3 minutes or until the liquid has almost all been absorbed before adding more. Cook for 15 minutes or until the rice is tender.'),
 (1298, 210, 4, 'Heat 2 tablespoons peanut oil in the hot wok and stir-fry cabbage, bell peppers, bamboo shoots, and carrot for 3 minutes. Toss in bean sprouts, sugar,  cup reserved mushroom water, salt, and pepper and cook for 1 minute.'),
 (1299, 209, 7, 'Meanwhile, fill a medium saucepan with water and bring to the boil. Cook the runner beans for three minutes, or until tender.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1300, 210, 5, 'Add onion and mushroom mixture, rice wine, and sesame oil and stir to combine well.Cook noodles in plenty of water at a rolling boil for about a minute.'),
 (1301, 209, 8, 'Drain in a colander then return to the pan and toss with a small knob of the remaining butter and plenty of ground black pepper.'),
 (1302, 210, 6, 'Drain thoroughly, rinse under cold running water, and drain again. Toss noodles with remaining 1 tablespoon soy sauce and remaining 1 teaspoon peanut oil.To serve, place noodles on a large warmed serving platter, spoon vegetable mixture on top, and mix lightly.'),
@@ -1634,7 +1634,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1641, 271, 3, 'Pour into glasses and serve.'),
 (1642, 263, 5, 'Bake the pandesal for 25 to 30 minutes or until nicely browned outside.The pandesal should be lightly crusty outside but soft inside.'),
 (1643, 263, 6, 'Serve warm. With butter or cheese. Or split and fill with all your favorite fillings.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1644, 268, 1, 'Place 3 tablespoons of unsalted butter and the light brown sugar in skillet over high heat and stir until the sugar has melted. It should begin to bubble, at which point you should remove it from the heat and let it cool.'),
 (1645, 270, 1, 'Preheat oven to 375 F.'),
 (1646, 268, 2, 'Place the peach slices down in the pan in a radial pattern (just make it look nice). Preheat the oven to 350°F while you make the cake batter. Beat the 8 tablespoons of butter and sugar together until they are fluffy. Beat in the vanilla, then beat an egg in until smooth and repeat for the last egg. In a separate bowl, mix the flour, baking powder, and salt together. Stir half of the dry ingredients into the batter. Stir in the milk. Then stir in the rest of the dry ingredients until just mixed (don’t overmix the batter).'),
@@ -1977,7 +1977,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1983, 319, 3, 'Spread half the breadcrumbs evenly in the prepared baking dish. Strew onion over the breadcrumbs. Distribute half the diced tomato over the onion, then sprinkle with half the garlic-herb mixture. Sprinkle with vinegar and 1/8 teaspoon salt.'),
 (1984, 322, 4, 'Remove the pudding from the heat and stir every 10 minutes. The mixture should start to thicken a little more off the heat. While the pudding is cooling make your peanut butter nuggets. In the bowl of an electric mixer add powdered sugar and peanut butter.'),
 (1985, 320, 4, 'Add the chicken stock, bring to a simmer, add the epazote, and simmer for 30 minutes; season to taste with salt and pepper; strain and reserve.To Make the Eggs');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (1986, 327, 2, 'Remove from heat and let cool.Separate the eggs. Cream the butter and sugar together until light and fluffy.  Beat the egg yolks in gradually until light in color.'),
 (1987, 319, 4, 'Heat 2 teaspoons oil in a large nonstick skillet over medium-high heat.'),
 (1988, 322, 5, 'Mix on medium speed until small peanut butter nuggets start to come together. If the mixture is too sandy simply add a few drops of water to the mixture and larger nuggets will form. After pudding is somewhat cool you can start to assemble the pie.'),
@@ -2288,7 +2288,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (2293, 381, 1, 'In a blender add hulled strawberries, sugar or honey, milk, yogurt, vanilla and blend well.I prefer having bits of fruits, so I just use the whipper button and pulse for few seconds.'),
 (2294, 379, 4, 'Brush both sides with the remaining 1/4 cup of olive oil and sprinkle with sea salt and black pepper.Preheat grill to 400 degrees. Grill over medium-high heat with the lid closed for 3-5 minutes per side, for a total of about 6-10 minutes, until the medallions have an internal temperature of 145 degrees.After grilling season is over,  you can saute the medallions in a pan.'),
 (2295, 373, 4, 'Per serving: 46 calories; 2 g fat (0 g sat, 0 g mono);0 mg cholesterol; 4 g carbohydrates; 1 g protein; 1 g fiber; 147 mg sodium; 137 mg potassium.Nutrition Bonus: Iron (35% daily value).Exchanges: 1 vegetable, 1/2 fat');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (2296, 380, 1, 'Heat oven to 220C/200C fan/gas 7.To make the bread, mix the flours, salt,bicarbonate and the walnuts in a mixingbowl. Then stir in the buttermilk and oil,followed by enough milk to make a verysoft, sticky dough.Dust a baking tray with wholemeal flourand shape the dough into a round, flat-ishloaf on it. Dust with a little more flour,slash the top a few times and bake for30-35 mins until risen, crusty and cookedthrough – it should sound hollow whenyou tap the bottom of it.Cool bread to just warm (or leave tocool completely if preparing ahead), thenget the cheese ready. Unwrap the cheeseand put back into the box. Tie stringaround the box in case the glue meltsin the oven.'),
 (2297, 375, 3, 'Garnish with some extra rosemary leaves.'),
 (2298, 381, 2, 'Transfer to a bowl and add chia seeds.Using a balloon whisk, holding the handle between both your palms, swish back and forth for the seeds to distribute evenly.Close the bowl and keep in the refrigerator for 4 hours or overnight. I leave it overnight.Top with more strawberry slices and enjoy.You can have this strawberry chia seed pudding either as a breakfast, post workout snack or for dessert.'),
@@ -2639,7 +2639,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (2643, 427, 1, 'Dice the onion and mince the garlic. Peel the sweet potato and carrots. Dice the sweet potato (1/4-1/2 inch cubes) and slice the carrots.'),
 (2644, 425, 9, 'Let cool slightly and serve.Optional: To create a gravy for this roast, remove the meat and vegetables from the pressure cooker and set aside in a covered container. Turn on the \"'),
 (2645, 425, 10, 'Saute\" setting, add the chopped mushrooms, extra wine, butter and thyme and let the liquid reduce for about ten minutes while meat cools. When cooking is finished, you can also whisk in  cup sour cream if desired for a creamy gravy.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (2646, 427, 2, 'Add the onion, garlic, sweet potato, carrots, lentils, curry powder, cloves, diced tomatoes, tomato sauce, and vegetable broth to the slow cooker. Stir to combine.'),
 (2647, 425, 11, 'Serve immediately.'),
 (2648, 427, 3, 'Place the lid on the slow cooker and cook on high for four hours or low for 7-8 hours. Once cooked, the lentils should be tender and most of the liquid should be absorbed.Stir the can of coconut milk into the lentils. Taste and adjust the salt or other spices as needed (the amount of salt needed will depend on the type of broth used and the salt content of the canned tomatoes).To serve, add 1 cup cooked rice to a bowl followed by 1 cup of the lentil mixture. Top with finely diced red onion and fresh cilantro.'),
@@ -2980,7 +2980,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (2983, 476, 7, 'Add the chicken broth (or water).Bring the stock to boil and skim the scrum and fat from the surface of the stock.Peel the apple and coarsely grate the apples.'),
 (2984, 482, 5, 'Remove from oven, cool completely.Meanwhile, whisk all the icing ingredients together (except orange peel). Slather on the cooled gingerbread loaf and sprinkle an additional 1 Tbsp of the candied orange peel on top of the icing.Could be left out at room temp for a day, but then store in the fridge to keep fresh, or can be frozen as well.'),
 (2985, 476, 8, 'Add the honey and salt and simmer uncovered for 20 minutes, stirring occasionally.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (2986, 476, 9, 'Add the potatoes and cook for 15 minutes, or until the potatoes are tender, and turn off the heat. Meanwhile you can make homemade curry roux.When the potatoes are ready, add the curry. If you use the store-bought curry roux, put 1-2 blocks of roux in a ladle and slowly let it dissolve with spoon or chopsticks. Continue with the rest of blocks. Then go to Step #17.If you are using homemade curry roux, add a ladleful or two of cooking liquid from the stock and mix into the curry paste.'),
 (2987, 476, 10, 'Add more cooking liquid if necessary and mix well until it’s smooth.'),
 (2988, 476, 11, 'Add the roux paste back into the stock in the large pot and stir to combine.'),
@@ -3298,7 +3298,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (3300, 545, 3, 'Transfer the vegetables and chile to a food processor and add the chicken broth and cilantro. Pulse until smooth but with some small pieces remaining, or to the desired consistency. Season with salt and pepper.'),
 (3301, 544, 4, 'Place some egg salad on each tortilla and a couple leaves of spinach. Enjoy!!!'),
 (3302, 545, 4, 'Serve immediately or cool to room temperature and store in an airtight container in the refrigerator for up to 5 days.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (3303, 542, 1, 'Preheat the oven to 375 degrees F.'),
 (3304, 542, 2, 'To make the souffle base, mix together the flour, butter, milk, egg yolks, Stilton, mustard, salt, and pepper, and mix until smooth and set aside. This maybe be prepared a day ahead of time.'),
 (3305, 542, 3, 'In a separate bowl, beat the egg whites, corn flour, and salt until stiff but fluffy.'),
@@ -3627,7 +3627,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (3628, 608, 2, 'Pour the chocolate into the plastic sandwich bag that is prepared in the cup.'),
 (3629, 600, 2, 'Add onions, cooking for 2-3 minutes until soft, then add garlic.'),
 (3630, 608, 3, 'Cut off a very small corner of the bag. This will be your decorator\'s bag to pipe the chocolate on the spoons.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (3631, 600, 3, 'Add in beef, salt and pepper and stir, just cooking until browned, about 4-5 minutes.'),
 (3632, 608, 4, 'Drizzle the chocolate on the spoons. To make the chocolate smooth out on the spoon, lightly jiggle the spoon until the chocolate flattens. Decorate with heart sprinkles.'),
 (3633, 602, 1, 'In a large bowl, combine the first seven ingredients; set aside.'),
@@ -3948,7 +3948,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (3949, 655, 5, 'Add the cheese and stir until melted.Top with crumbled bacon when serving (optional).'),
 (3950, 658, 2, 'Add garlic and cook for 1 minute.'),
 (3951, 657, 9, 'Let bars cool completely.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (3952, 660, 2, 'Cut chicken things into 1-inch cubes. Sprinkle with salt and pepper.'),
 (3953, 659, 8, 'Transfer ice cream to airtight container and chill in freezer for at least 4 to 5 hours before serving.'),
 (3954, 657, 10, 'Cut into squares and serve.'),
@@ -4277,7 +4277,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (4277, 720, 5, 'Let cool completely before cutting into squares and serving. These are very moist brownies, they may be easier to cut chilled. Store in an airtight container at room temperature for up to 3 days or in the fridge for up to 5 days.'),
 (4278, 714, 9, 'Serve drizzled with crme frache.Do Ahead: Beets can be marinated 3 days ahead. Cover and chill.'),
 (4279, 715, 5, 'Pour in the chicken broth. Measure out the evaporated milk and whisk in the cornstarch.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (4280, 717, 13, '5'),
 (4281, 712, 1, 'Combine all ingredients except chicken breasts in a large zip lock baggy and blend.'),
 (4282, 715, 6, 'Pour into the pan with the chicken broth and stir together.'),
@@ -4607,7 +4607,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (4606, 777, 6, 'Add seasonings, baking soda and enough water, about 1/3 to 1/2 cup, to moisten and hold mixture together. Shape mixture into 1-inch balls.'),
 (4607, 776, 7, 'Pour the brown sugar mixture over the sweet potatoes and toss gently to coat. Sprinkle with salt to taste.'),
 (4608, 777, 7, 'Heat oil in deep saucepan over medium heat, and deep-fry balls until crisp and golden. When done, balls float to surface.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (4609, 776, 8, 'Bake, uncovered, for an additional 10 minutes or until the potatoes are cooked through. Toss again before serving.'),
 (4610, 777, 8, 'Remove from heat, and drain on paper towels before serving.'),
 (4611, 780, 1, 'Roll out your two pie crusts into circles with approximately 9-10 diameter.'),
@@ -4907,7 +4907,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (4905, 834, 2, 'Whisk together almond milk and cider vinegar and pour over chicken. Cover and refrigerate for 30-60 minutes. Preheat oven to 375ºF. Set a wire rack on top of a rimmed baking sheet and mist with cooking spray.Measure the flour and chili powder into a medium zip-top plastic bag and shake to combine.'),
 (4906, 834, 3, 'Place the egg white in a small bowl. Grind the cereal into a coarse meal using a small food processor, and pour the crumbs onto a plate.'),
 (4907, 835, 2, 'Add 1 Tablespoon canola oil and heat to a ripple.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (4908, 834, 4, 'Remove all of the chicken from the milk and place in the bag with the flour. Shake until the chicken is fully coated. Dip each piece of chicken in the egg white and then roll in the cornflake crumbs.'),
 (4909, 828, 1, 'Preheat the oven to 375°F.'),
 (4910, 835, 3, 'Add beef to pan and brown on all sides, working in batches if needed.'),
@@ -5261,7 +5261,7 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (5265, 890, 3, '2'),
 (5266, 893, 2, 'Whisk in buttermilk. Slowly add dry ingredients, stirring until completely combined.'),
 (5267, 891, 1, 'Bake the potatoes at 425 degrees for about an hour, or until soft.');
-INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
+INSERT INTO `Instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (5268, 888, 1, 'Preheat the oven to 350 degrees Fahrenheit and line a 9\" brownie pan with parchment paper both ways.In a medium-sized bowl, whisk together the peanut flour, oat flour, both cocoa powders, baking powder and xanthan gum.In a large stand mixer bowl with beater attachment, add the egg, erythritol, applesauce, almond milk, stevia and salt.'),
 (5269, 888, 2, 'Mix on medium-low speed until combined.'),
 (5270, 893, 3, 'Add one large scoop to each greased muffin pan cavity or roughly 3/4 full.'),
@@ -5333,5 +5333,5 @@ INSERT INTO `instruction` (`id`, `recipe_id`, `step_num`, `instruction`) VALUES
 (5336, 897, 8, 'Remove the tenderloin from the oven once done cooking and let it sit for 10 minutes to let the juices redistribute.Using a carving knife and a carving fork slice the tenderloin across the grain {into 1/2-inch-thick pieces} using a sawing motion.Plate the beef tenderloin on a platter with slider buns and allow your guests to assemble or assemble them yourself by placing a slice of the beef tenderloin on top of the bottom of the bun along with a small spoonful of the cranberry orange relish and a small drizzle of the juices from the cranberries.'),
 (5337, 897, 9, 'Garnish with freshly chopped rosemary.');
 
-ALTER TABLE `instruction`
+ALTER TABLE `Instruction`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5338;

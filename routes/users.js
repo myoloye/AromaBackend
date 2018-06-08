@@ -178,7 +178,7 @@ router.post('/:userId', Auth.authSameUser, function(req, res, next){
                 var options2 = options;
                 options2.patch = true;
                 User.where({id: req.params.userId}).fetch().then(function(user){
-                    return user.save({about: about}, options2);
+                    return user.save({about: about}, {transacting: t, patch: true});
                 }).then(t.commit).catch(t.rollback);
             }).then(function(user){
                 res.status(200).json({error: false, data: {about: user.get("about")}});

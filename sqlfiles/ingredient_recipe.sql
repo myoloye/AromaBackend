@@ -1,4 +1,4 @@
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (1, 1002030, 3, 'Freshly ground black pepper, to taste', '24.000', 'servings', 'black, freshly ground, to taste'),
 (2, 18372, 1, '½ teaspoon baking soda', '0.500', 'tsp', ''),
 (3, 18371, 5, '1 1/2 teaspoons baking powder', '1.500', 'tsps', ''),
@@ -626,7 +626,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (625, 1001, 60, '2 tablespoons butter', '2.000', 'Tbsps', ''),
 (626, 93617, 55, '125g ball mozzarella or burrata (see tip, below), torn into pieces', '125.000', 'g', '(see tip, below)'),
 (627, 1123, 57, '3 eggs', '3.000', 'eggs', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (628, 18371, 56, '1 1/2 tsp. baking powder', '1.500', 'tsp', ''),
 (629, 1082047, 58, '1 tsp. kosher salt', '1.000', 'tsp', ''),
 (630, 6168, 54, '1 regular-sized bottle Franks Red Hot Sauce (not the mini size)', '1.000', 'hot sauce', 'red, mini, (not the size)'),
@@ -1264,7 +1264,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (1262, 2064, 114, '1 tablespoon roughly chopped mint', '1.000', 'Tbsp', 'roughly chopped'),
 (1263, 4053, 111, '2 tablespoons extra-virgin olive oil', '2.000', 'Tbsps', 'extra-virgin'),
 (1264, 6971, 108, '1 tablespoon Worcestershire sauce', '1.000', 'Tbsp', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (1265, 10218, 114, '2 1-pound pork tenderloins', '2.000', 'lb', ''),
 (1266, 1022053, 114, '2 tablespoons rice wine vinegar', '2.000', 'Tbsps', ''),
 (1267, 4053, 111, 'Extra-virgin olive oil, for brushing', '4.000', 'servings', 'extra-virgin, for brushing'),
@@ -1894,7 +1894,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (1913, 2011, 171, '1/4 teaspoon ground cloves', '0.250', 'tsp', ''),
 (1914, 14037, 174, '2 tablespoons anisette liquor', '2.000', 'Tbsps', ''),
 (1915, 10411111, 175, '1 teaspoon rosewater', '1.000', 'tsp', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (1917, 11935, 172, '84 ketchup cups', '84.000', 'ketchups', ''),
 (1918, 11215, 173, '2 cloves garlic, minced', '2.000', 'cloves', 'minced'),
 (1919, 12220, 177, '1 tablespoon ground flaxseed', '1.000', 'Tbsp', ''),
@@ -2487,7 +2487,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (2520, 1256, 228, '1 cup plain Greek yogurt', '1.000', 'cup', 'plain'),
 (2521, 1006615, 232, 'Optional: ¼ cup prawn stock (while you won\'t taste it it will add depth to the dish)', '0.250', 'cup', '(while you won\'t taste it it will add depth to the dish)'),
 (2522, 2050, 237, '1 tablespoon vanilla extract', '1.000', 'Tbsp', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (2523, 1145, 228, '½ cup (1 stick) unsalted butter, room temperature', '0.500', 'cup', 'unsalted, room temperature, (1 stick)'),
 (2524, 11821, 232, '1 red or green pepper, minced', '1.000', 'red bell pepper', 'green, red, minced'),
 (2525, 14412, 237, '3 cups water', '3.000', 'cups', ''),
@@ -3116,7 +3116,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (3148, 20035, 297, '1 cup uncooked quinoa', '1.000', 'cup', 'uncooked'),
 (3149, 1042027, 295, '1 ounce package Fajita Seasoning', '1.000', 'oz', ''),
 (3150, 20420, 296, '1 package (8 ounces) Manicotti pasta, uncooked', '8.000', 'oz', 'uncooked');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (3151, 9206, 293, '1/2 cup orange juice, divided', '0.500', 'cup', 'divided'),
 (3152, 2050, 294, '1/2 teaspoon vanilla extract', '0.500', 'tsp', ''),
 (3153, 15152, 295, '1 1/2 pounds medium uncooked peeled shrimp deveined & tails removed', '1.500', 'lb', 'medium, deveined, uncooked, peeled'),
@@ -3718,7 +3718,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (3765, 1145, 352, '8 ounces (2 sticks) unsalted butter, room temperature', '8.000', 'oz', 'unsalted, room temperature, (2 sticks)'),
 (3766, 1002014, 353, 'A dash of cumin', '1.000', 'dash', ''),
 (3767, 9003, 356, '8 medium apples (3 different types, such as Granny Smith, Haralson and Honeycrisp, or any three you like), peeled, cored and cut into 1-inch chunks', '8.000', 'apples', 'or any three you like), peeled, cored and cut into 1-inch chunks,  such as granny smith, haralson and honeycrisp, , medium');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (3768, 9037, 355, '1 avocado, peeled, pitted and thinly sliced', '1.000', 'avocado', 'pitted, peeled, thinly sliced'),
 (3769, 18371, 354, '1 ½ tsp baking powder', '1.500', 'tsp', ''),
 (3770, 2004, 356, '6 ounces rendered leaf lard, cold, cut into cubes', '6.000', 'oz', 'cold, cut into cubes'),
@@ -4336,7 +4336,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (4382, 1082047, 410, '1 1/2 tsp kosher salt', '1.500', 'tsp', ''),
 (4383, 11252, 409, '1 1/2 cups shredded lettuce', '1.500', 'cups', 'shredded'),
 (4384, 2025, 415, '1/2 teaspoon nutmeg', '0.500', 'tsp', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (4385, 2050, 411, '1 teaspoon vanilla extract', '1.000', 'tsp', ''),
 (4386, 19334, 410, '1 1/2 cup light brown sugar', '1.500', 'cup', 'light'),
 (4387, 11260, 409, '4 oz fresh whole mushrooms, cut into quarters', '4.000', 'oz', 'fresh, whole, cut into quarters'),
@@ -4950,7 +4950,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (4995, 11209, 473, '2 cups cubed eggplant', '2.000', 'cups', 'cubed'),
 (4996, 19335, 475, '3 T sugar', '3.000', 'T', ''),
 (4997, 9003, 476, '1 apple (I used Fuji apple)', '1.000', 'apple', '(I used Fuji apple)');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (4998, 1002030, 474, '1 teaspoon freshly ground black pepper', '1.000', 'tsp', 'black, freshly ground'),
 (4999, 1049, 477, 'half of 1 14-ounce can dulce de leche (make your own, or storebought; sweetened condensed milk may be substituted but the flavor/texture of bars will ', '14.000', 'oz', 'sweetened, canned, (make your own, or storebought; condensed milk may be substituted but the flavor/texture of bars will change)'),
 (5000, 10019146, 478, '1 package (11.5oz) milk chocolate morsels', '11.500', 'oz', ''),
@@ -5557,7 +5557,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (5601, 6615, 533, '3 cups low-sodium vegetable broth', '3.000', 'cups', 'low-sodium'),
 (5602, 1226, 535, '2 large eggs or ½ cup egg substitute', '2.000', 'egg substitutes', 'large'),
 (5603, 11564, 534, '1 large turnip, peeled and chopped', '1.000', 'turnip', 'large, peeled, chopped');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (5604, 20081, 535, '? cup all-purpose flour', '0.667', 'cup', 'all-purpose'),
 (5605, 14412, 534, '8 cups water', '8.000', 'cups', ''),
 (5606, 4673, 535, '¼ cup unsalted butter or soy margarine, at room temperature', '0.250', 'cup', 'unsalted, at room temperature'),
@@ -6188,7 +6188,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (6231, 2050, 591, '1 tsp. vanilla', '1.000', 'tsp', ''),
 (6232, 20080, 591, '1 cup whole wheat flour', '1.000', 'cup', 'whole wheat'),
 (6233, 18371, 598, '1/2 teaspoon baking powder', '0.500', 'tsp', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (6234, 18372, 598, '1 teaspoon baking soda', '1.000', 'tsp', ''),
 (6235, 4582, 598, '1 cup canola oil', '1.000', 'cup', ''),
 (6236, 11124, 598, '2 cups finely grated carrots', '2.000', 'cups', 'finely grated'),
@@ -6793,7 +6793,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (6860, 20400, 656, '4 cups macaroni pasta, cooked al dente', '4.000', 'cups', 'cooked'),
 (6861, 20081, 657, '1 1/2 cups all-purpose flour', '1.500', 'cups', 'all-purpose'),
 (6862, 11215, 658, '3 tablespoons garlic, minced', '3.000', 'Tbsps', 'minced');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (6863, 1053, 659, '2 cups heavy cream', '2.000', 'cups', ''),
 (6864, 5091, 660, '1/2 pound chicken thighs', '0.500', 'lb', ''),
 (6865, 11011, 661, '1 bunch asparagus, cut into 1-inch pieces', '1.000', 'bunch', 'cut into 1-inch pieces'),
@@ -7408,7 +7408,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (7486, 6168, 718, '1 tablespoon Tabasco sauce', '1.000', 'Tbsp', ''),
 (7487, 4053, 714, '7 tablespoons olive oil, divided', '7.000', 'Tbsps', 'divided'),
 (7488, 1125, 720, '3 large eggs plus 1 egg yolk', '3.000', 'egg yolks', 'large');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (7489, 1256, 716, '1/2 c. plain Greek yogurt', '0.500', 'c', 'plain'),
 (7490, 9160, 712, 'juice of 1 lime', '1.000', 'juice of lime', ''),
 (7491, 11215, 715, '2 cloves garlic minced', '2.000', 'cloves', 'minced'),
@@ -8005,7 +8005,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (8082, 2025, 770, '1 teaspoon nutmeg', '1.000', 'tsp', ''),
 (8083, 2006, 771, '1/2 teaspoon ground cardamom', '0.500', 'tsp', ''),
 (8084, 9231, 775, '1/2 cup passion fruit puree, cold', '0.500', 'cup', 'cold');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (8085, 9050, 779, '2 cups fresh blueberries', '2.000', 'cups', 'fresh'),
 (8086, 11297, 777, '½ cup minced fresh parsley', '0.500', 'cup', 'fresh, minced'),
 (8087, 1002030, 774, '1/2 green pepper diced into 1/4\" pieces', '0.500', 'peppers', 'diced, green'),
@@ -8612,7 +8612,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (8688, 20035, 828, '¾ cups uncooked quinoa', '0.750', 'cups', 'uncooked'),
 (8689, 18371, 834, '1 teaspoon baking powder', '1.000', 'tsp', ''),
 (8690, 2009, 834, '1/2 teaspoon chili powder', '0.500', 'tsp', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (8691, 2048, 834, '1 tablespoon cider vinegar', '1.000', 'Tbsp', ''),
 (8692, 2047, 835, '1½ teaspoon salt', '1.500', 'tsp', ''),
 (8693, 2010, 834, '1/2 teaspoon cinnamon', '0.500', 'tsp', ''),
@@ -9219,7 +9219,7 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (9310, 11291, 894, '1/4 cup finely chopped scallions or onions', '0.250', 'cup', 'finely chopped'),
 (9311, 1145, 893, '1/4C unsalted butter, melted', '0.250', 'C', 'unsalted, melted'),
 (9312, 11291, 891, 'green onions', '14.000', 'servings', '');
-INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
+INSERT INTO `Ingredient_Recipe` (`id`, `ingredient_id`, `recipe_id`, `original_string`, `amount`, `unit`, `extra_info`) VALUES
 (9313, 1017, 892, '1 (8-ounce) package cream cheese, at room temperature', '8.000', 'oz', 'at room temperature'),
 (9314, 1123, 892, '2 large eggs', '2.000', 'eggs', 'large'),
 (9315, 2028, 886, '2 teaspoons paprika', '2.000', 'tsps', ''),
@@ -9267,5 +9267,5 @@ INSERT INTO `ingredient_recipe` (`id`, `ingredient_id`, `recipe_id`, `original_s
 (9357, 1145, 897, '2 Tablespoons unsalted butter', '2.000', 'Tablespoons', 'unsalted'),
 (9358, 14412, 897, '1 cup water', '1.000', 'cup', '');
 
-ALTER TABLE `ingredient_recipe`
+ALTER TABLE `Ingredient_Recipe`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9359;

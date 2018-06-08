@@ -8,7 +8,7 @@ bookshelf.plugin(mask);
 bookshelf.plugin('visibility');
 
 var RecipeUserSaved = bookshelf.Model.extend({
-    tableName: 'recipe_user_saved',
+    tableName: 'Recipe_User_Saved',
 
     user: function(){
         return this.belongsTo('User');

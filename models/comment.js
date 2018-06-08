@@ -36,7 +36,7 @@ var Comment = bookshelf.Model.extend({
             }
         ]
     },
-    tableName: 'comment',
+    tableName: 'Comment',
 
     recipe: function(){
         return this.belongsTo('Recipe');

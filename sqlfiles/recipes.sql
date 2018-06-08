@@ -1,4 +1,4 @@
-INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
+INSERT INTO `Recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
 (1, 'Peanut Butter & Jelly Cookie Bars', NULL, 24, '35', 'https://spoonacular.com/recipeImages/612149-556x370.jpg', NULL, 'http://www.browneyedbaker.com/peanut-butter-jelly-cookie-bars/', 'Brown Eyed Baker', '0.000', 0, 0, 612149),
 (2, 'Marinated Veggie Salad', NULL, 8, '25', 'https://spoonacular.com/recipeImages/501816-556x370.jpg', NULL, 'http://cantstayoutofthekitchen.com/2013/07/12/marinated-veggie-salad/', 'Can\'t Stay out of the Kitchen', '0.000', 0, 0, 501816),
 (3, 'Phyllo Cigars', NULL, 24, '90', 'https://spoonacular.com/recipeImages/597205-556x370.jpg', NULL, 'http://leitesculinaria.com/992/recipes-phyllo-cigars.html', 'Leites Culinaria', '0.000', 0, 0, 597205),
@@ -209,7 +209,7 @@ INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `ima
 (211, 'Cheesy Grilled Pesto Chicken and Sundried Tomato Sandwich', NULL, 2, '15', 'https://spoonacular.com/recipeImages/607905-556x370.jpg', NULL, 'http://www.tablefortwoblog.com/cheesy-grilled-pesto-chicken-and-sundried-tomato-sandwich/', 'Table for Two Blog', '0.000', 0, 0, 607905),
 (212, 'Ancient Grains Pear Porridge', NULL, 4, '30', 'https://spoonacular.com/recipeImages/537912-556x370.jpg', NULL, 'http://nutritionstripped.com/ancient-grains-pear-porridge/', 'Nutrition Stripped ', '0.000', 0, 0, 537912),
 (213, 'Fusilli with Lentils, Sausage & Tomatoes', NULL, 6, '25', 'https://spoonacular.com/recipeImages/698664-556x370.jpg', NULL, 'http://www.eatingwell.com/recipes/fusilli_with_lentils_sausage_tomatoes.html', 'Eating Well', '0.000', 0, 0, 698664);
-INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
+INSERT INTO `Recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
 (214, 'Banana Almond Meal Muffins (Gluten Free + Vegan Optional)', NULL, 8, '35', 'https://spoonacular.com/recipeImages/500308-556x370.jpg', NULL, 'http://minimalistbaker.com/banana-almond-meal-muffins-gluten-free-vegan-optional/', 'Minimalist Baker', '0.000', 0, 0, 500308),
 (215, 'Individual Christmas pies', NULL, 4, '120', 'https://spoonacular.com/recipeImages/219765-556x370.jpg', NULL, 'http://www.bbcgoodfood.com/recipes/1799642/individual-christmas-pies', 'BBC Good Food', '0.000', 0, 0, 219765),
 (216, 'Fudge Puddles', NULL, 48, '110', 'https://spoonacular.com/recipeImages/988405-556x370.jpg', NULL, 'https://www.foodfanatic.com/recipes/fudge-puddles-recipe/', 'Food Fanatic', '0.000', 0, 0, 988405),
@@ -422,7 +422,7 @@ INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `ima
 (425, 'Garlic Herb Pot Roast (Instant Pot)', NULL, 6, '45', 'https://spoonacular.com/recipeImages/855559-556x370.jpg', NULL, 'https://wellnessmama.com/77044/garlic-herb-pot-roast/', 'Wellness Mama', '0.000', 0, 0, 855559),
 (426, 'Lemon Pie Cheesecake Dip', NULL, 12, '45', 'https://spoonacular.com/recipeImages/813828-556x370.jpg', NULL, 'http://beyondfrosting.com/2015/03/09/lemon-pie-cheesecake-dip/', 'Beyond Frosting', '0.000', 0, 0, 813828),
 (427, 'Slow Cooker Coconut Curry Lentils', NULL, 10, '270', 'https://spoonacular.com/recipeImages/793482-556x370.jpg', NULL, 'http://www.budgetbytes.com/2016/07/slow-cooker-coconut-curry-lentils/', 'Budget Bytes', '0.000', 0, 0, 793482);
-INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
+INSERT INTO `Recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
 (428, 'Grandma’s Zucchini Cake', NULL, 20, '60', 'https://spoonacular.com/recipeImages/247140-556x370.jpg', NULL, 'http://www.simplyrecipes.com/recipes/grandmas_zucchini_cake/', 'Simply Recipes', '0.000', 0, 0, 247140),
 (429, 'Cafe Rio Pork', NULL, 7, '482', 'https://spoonacular.com/recipeImages/549585-556x370.jpg', NULL, 'http://www.ohsweetbasil.com/2010/05/cinco-de-mayo-sweet-pork.html', 'Oh Sweet Basil', '0.000', 0, 0, 549585),
 (430, 'Grilled Avocado Crostini Board', NULL, 12, '45', 'https://spoonacular.com/recipeImages/798277-556x370.jpg', NULL, 'http://foxeslovelemons.com/grilled-avocado-crostini-board/', 'Foxes Love Lemons', '0.000', 0, 0, 798277),
@@ -634,7 +634,7 @@ INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `ima
 (638, 'Salmon Pesto Pasta Salad', NULL, 8, '25', 'https://spoonacular.com/recipeImages/610614-556x370.jpg', NULL, 'http://www.godairyfree.org/recipes/salmon-pesto-pasta-salad', 'Go Dairy Free', '0.000', 0, 0, 610614),
 (639, 'Brownie-Maca Energy Bars', NULL, 10, '40', 'https://spoonacular.com/recipeImages/748672-556x370.jpeg', NULL, 'http://www.foodnetwork.com/recipes/brownie-maca-energy-bars.html', 'Foodnetwork', '0.000', 0, 0, 748672),
 (640, 'Blueberry Apple Crumble for Two', NULL, 2, '35', 'https://spoonacular.com/recipeImages/601836-556x370.png', NULL, 'http://whatscookinglove.com/2013/08/blueberry-apple-crumble-for-two/', 'Whats Cooking Love', '0.000', 0, 0, 601836);
-INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
+INSERT INTO `Recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
 (641, 'Simply the Best Hamburgers', NULL, 4, '45', 'https://spoonacular.com/recipeImages/518949-556x370.jpg', NULL, 'http://spicysouthernkitchen.com/simply-best-hamburgers/', 'Spicy Southern Kitchen', '0.000', 0, 0, 518949),
 (642, 'Vanilla Bean Yogurt with Orange Cranberry Sauce', NULL, 6, '20', 'https://spoonacular.com/recipeImages/489046-556x370.jpg', NULL, 'http://www.branappetit.com/2013/11/21/vanilla-bean-yogurt-with-orange-cranberry-sauce/', 'Bran Appetit', '0.000', 0, 0, 489046),
 (643, 'Ham and Cheese Pan Souffle', NULL, 4, '55', 'https://spoonacular.com/recipeImages/474904-556x370.jpg', NULL, 'http://www.tasteandtellblog.com/ham-and-cheese-pan-souffle/', 'Taste and Tell Blog', '0.000', 0, 0, 474904),
@@ -844,7 +844,7 @@ INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `ima
 (850, 'Mexican Green Rice', NULL, 6, '60', 'https://spoonacular.com/recipeImages/246390-556x370.jpg', NULL, 'http://www.simplyrecipes.com/recipes/mexican_green_rice/', 'Simply Recipes', '0.000', 0, 0, 246390),
 (851, 'Butternut Squash and Corn Soup', NULL, 10, '45', 'https://spoonacular.com/recipeImages/881862-556x370.jpg', NULL, 'http://www.myrecipes.com/recipe/butternut-squash-corn-soup', 'My Recipes', '0.000', 0, 0, 881862),
 (852, 'Sweet Potato Pancakes', NULL, 14, '40', 'https://spoonacular.com/recipeImages/178308-556x370.jpg', NULL, 'http://www.bettycrocker.com/recipes/sweet-potato-pancakes/3d3a5f4d-1988-466e-a358-0eac2d44bcbe', 'Betty Crocker', '0.000', 0, 0, 178308);
-INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
+INSERT INTO `Recipe` (`id`, `title`, `description`, `servings`, `duration`, `image_url`, `user_id`, `source_url`, `source`, `score`, `likes`, `dislikes`, `spoonacular_id`) VALUES
 (853, 'Everything Scrambled Eggs', NULL, 4, '45', 'https://spoonacular.com/recipeImages/611960-556x370.jpg', NULL, 'http://www.framedcooks.com/2014/09/everything-scrambled-eggs.html', 'Framed Cooks', '0.000', 0, 0, 611960),
 (854, 'Miso chilli steak with crispy sweet potatoes', NULL, 2, '30', 'https://spoonacular.com/recipeImages/221187-556x370.jpg', NULL, 'http://www.bbcgoodfood.com/recipes/2853677/miso-chilli-steak-with-crispy-sweet-potatoes', 'BBC Good Food', '0.000', 0, 0, 221187),
 (855, 'Roasted Shrimp Cocktail', NULL, 4, '10', 'https://spoonacular.com/recipeImages/497398-556x370.jpg', NULL, 'http://www.fortheloveofcooking.net/2013/11/roasted-shrimp-cocktail.html', 'For the Love of Cooking', '0.000', 0, 0, 497398),
@@ -892,5 +892,5 @@ INSERT INTO `recipe` (`id`, `title`, `description`, `servings`, `duration`, `ima
 (897, 'Beef Tenderloin Sliders with Cranberry Orange Relish', NULL, 4, '60', 'https://spoonacular.com/recipeImages/694401-556x370.jpg', NULL, 'http://www.acedarspoon.com/beef-tenderloin-sliders-with-cranberry-orange-relish/', 'A Cedar Spoon', '0.000', 0, 0, 694401);
 
 
-ALTER TABLE `recipe`
+ALTER TABLE `Recipe`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=898;

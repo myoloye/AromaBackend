@@ -21,10 +21,10 @@ var Instruction = bookshelf.Model.extend({
             }
         ]
     },
-    tableName: 'instruction',
+    tableName: 'Instruction',
 
     recipe: function(){
-        return this.belongsTo('Recipe');
+        return this.belongsTo('Recipe', 'recipe_id');
     },
     validate: function(model, attrs, options) {
         var check = new CheckIt(this.validations);

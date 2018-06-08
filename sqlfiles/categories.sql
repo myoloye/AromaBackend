@@ -1,4 +1,4 @@
-INSERT INTO `category` (`id`, `name`) VALUES
+INSERT INTO `Category` (`id`, `name`) VALUES
 (1, 'vegetarian'),
 (2, 'vegan'),
 (3, 'gluten free'),
@@ -39,6 +39,6 @@ INSERT INTO `category` (`id`, `name`) VALUES
 (38, 'caribbean'),
 (39, 'latin american');
 
-ALTER TABLE `category`
+ALTER TABLE `Category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 COMMIT;

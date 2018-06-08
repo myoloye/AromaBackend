@@ -1,4 +1,4 @@
-INSERT INTO `similar_ingredient` (`ingredient_name`, `ingredient_id`) VALUES
+INSERT INTO `Similar_Ingredient` (`ingredient_name`, `ingredient_id`) VALUES
 ('alcohol', 14003),
 ('alcohol', 14037),
 ('alcohol', 14051),

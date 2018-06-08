@@ -1,4 +1,4 @@
-INSERT INTO `ingredient` (`id`, `name`) VALUES
+INSERT INTO `Ingredient` (`id`, `name`) VALUES
 (0, 'none'),
 (1001, 'butter'),
 (1004, 'blue cheese'),

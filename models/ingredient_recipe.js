@@ -6,7 +6,7 @@ require('./ingredient');
 bookshelf.plugin('visibility');
 
 var Ingredient_Recipe = bookshelf.Model.extend({
-    tableName: 'ingredient_recipe',
+    tableName: 'Ingredient_Recipe',
 
     ingredients: function(){
         return this.belongsTo('Ingredient');

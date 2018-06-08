@@ -13,7 +13,7 @@ bookshelf.plugin('visibility');
 
 var User = bookshelf.Model.extend({
     initialize: function() {
-        this.on('saving', this.validate);
+        this.on('creating', this.validate);
     },
     validations: {
         email: [
@@ -27,7 +27,7 @@ var User = bookshelf.Model.extend({
             },
             {
                 rule: function(val) {
-                    return bookshelf.knex('user').where('email', '=', val).then(function(resp) {
+                    return bookshelf.knex('User').where('email', '=', val).then(function(resp) {
                         if (resp.length > 0)
                             throw new Error("email is taken");
                     });
@@ -45,7 +45,7 @@ var User = bookshelf.Model.extend({
             },
             {
                 rule: function(val) {
-                    return bookshelf.knex('user').where('username', '=', val).then(function(resp) {
+                    return bookshelf.knex('User').where('username', '=', val).then(function(resp) {
                         if (resp.length > 0)
                             throw new Error("username is taken");
                     });
@@ -59,19 +59,19 @@ var User = bookshelf.Model.extend({
             }
         ]
     },
-    tableName: 'user',
+    tableName: 'User',
 
     uploaded_recipes: function(){
-        return this.hasMany('Recipe');
+        return this.hasMany('Recipe', 'user_id');
     },
     liked_recipes: function(){
-        return this.belongsToMany('Recipe', 'votes').query({where: {type: 'l'}});
+        return this.belongsToMany('Recipe', 'Votes').query({where: {type: 'l'}});
     },
     disliked_recipes: function(){
-        return this.belongsToMany('Recipe', 'votes').query({where: {type: 'd'}});
+        return this.belongsToMany('Recipe', 'Votes').query({where: {type: 'd'}});
     },
     saved_recipes: function(){
-        return this.belongsToMany('Recipe', 'recipe_user_saved');
+        return this.belongsToMany('Recipe', 'Recipe_User_Saved');
     },
     subscribed_to: function(){
         return this.belongsToMany('Category');

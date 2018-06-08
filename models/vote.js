@@ -8,7 +8,7 @@ bookshelf.plugin(mask);
 bookshelf.plugin('visibility');
 
 var Vote = bookshelf.Model.extend({
-    tableName: 'votes',
+    tableName: 'Votes',
 
     user: function(){
         return this.belongsTo('User');

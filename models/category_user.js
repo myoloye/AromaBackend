@@ -8,7 +8,7 @@ bookshelf.plugin(mask);
 bookshelf.plugin('visibility');
 
 var CategoryUser = bookshelf.Model.extend({
-    tableName: 'category_user',
+    tableName: 'Category_User',
 
     user: function(){
         return this.belongsTo('User');

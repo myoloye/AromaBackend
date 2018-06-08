@@ -6,7 +6,7 @@ require('./category');
 bookshelf.plugin('visibility');
 
 var Category_Recipe = bookshelf.Model.extend({
-    tableName: 'category_recipe',
+    tableName: 'Category_Recipe',
 
     categories: function(){
         return this.belongsTo('Category');
